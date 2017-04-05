@@ -136,7 +136,7 @@ void animatedObj::getAniInfo(const std::string& animationInfo) {
 		}//currentAni = &m_animations.begin().second;
 		//for(auto& i:m_animations){std::cout<<i.first<<std::endl;}
 	}
-	catch(const std::exception& e){
+	catch(...){
 		//somehow crash
 		//std::cout << e << std::endl;
 		std::cout << animationInfo << " is not a valid file" << std::endl;
