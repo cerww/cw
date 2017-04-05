@@ -15,7 +15,3 @@ void fpslimiter::limitFPS(){
     //std::cout<<(1.0/_maxFPS)-(currentFrame-_prevFrame)<<std::endl;
     _prevFrame=glfwGetTime();
 }
-fpslimiter::~fpslimiter()
-{
-    //dtor
-}
