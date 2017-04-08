@@ -13,7 +13,6 @@
 #include "GLSLthingy.h"
 #include "imgLoader.h"
 #include "SpriteBatch.h"
-#include "manager.h"
 #include "camera2D.h"
 #include "fpslimiter.h"
 #include <thread>
