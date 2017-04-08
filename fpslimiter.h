@@ -10,7 +10,7 @@ class fpslimiter
 {
     public:
         fpslimiter();
-        void setMaxFPS(const int&newfps){_maxFPS=newfps;};
+        void setMaxFPS(int newfps){_maxFPS=newfps;};
         double getMaxFPS(){return _maxFPS;};
         void limitFPS();
 

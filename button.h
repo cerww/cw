@@ -4,18 +4,29 @@
 #include "drawableObj.h"
 #include "things.h"
 #include <functional>
+#include <array>
 
 //template<typename fn>
-class button:public drawableObj {
+class button:private drawableObj {
 public:
 	button() = default;
 	//button(glm::vec4, texture, Color C, fn f, Color C2);
-	button(glm::vec4, texture, Color C, std::function<void()> f,const std::string&);
+	button(glm::vec4, std::array<texture,3> t, std::array<Color,3> C, std::function<void()> f,const std::string&);
+
 	//template<typename ... Args>
 	void doClick();
 	const auto& getText() const { return m_text; };
+
 	void setText(const std::string& s) {
 		m_text = s;
+	}
+	
+	void setNormalTexture(texture t) {
+		m_normalTexture = std::move(t);
+	}
+
+	void setNormalColor(Color c) {
+		m_normalColor = std::move(c);
 	}
 
 	void setHoverColor(Color c) {
@@ -31,11 +42,16 @@ public:
 	void setClickTexture(texture t) {
 		m_clickTexture = std::move(t);
 	}
-
-	void getState(const app&);
 	
-
+	//void getState(const app&);
+	using drawableObj::getSpot;
+	using drawableObj::draw;
+	void update(const glm::vec2,int);
 protected:
+
+	Color m_normalColor;
+	texture m_normalTexture;
+
 	Color m_hoverColor;
 	texture m_hoverTexture;
 
@@ -54,9 +70,3 @@ private:
 inline auto makeButton(glm::vec4 d, texture t, Color C, fn f,const std::string& s) {
 	return button(d, t, C, f,s);
 }*/
-
-inline void ktest() {
-	int b = 0;
-	const auto f = [&b]() {std::cout << "abc" << std::endl; };
-	auto a = button({}, {}, {}, f, "");
-}
