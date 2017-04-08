@@ -94,9 +94,6 @@ void app::end(){
 void app::setMaxFPS(int newfps){
     _maxFPS=newfps;
 }
-void app::draw(const glm::vec4& dimensions,const glm::vec4& uv,GLuint text,Color colour,const float& depth){
-    _spriteBatch.draw(dimensions,uv,text,colour,depth);
-}
 texture app::getTexture(const std::string &textname){
     auto it= _textures.find(textname);
     if(it==_textures.end()){

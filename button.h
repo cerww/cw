@@ -6,7 +6,7 @@
 #include <functional>
 
 //template<typename fn>
-class button:private drawableObj {
+class button:public drawableObj {
 public:
 	button() = default;
 	//button(glm::vec4, texture, Color C, fn f, Color C2);

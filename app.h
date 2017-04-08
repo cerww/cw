@@ -50,8 +50,9 @@ class app
         void start();
         void end();
 		*/
-        void draw(const glm::vec4& dimensions,const glm::vec4& uv,GLuint text,Color colour,const float& depth);
+        //void draw(const glm::vec4& dimensions,const glm::vec4& uv,GLuint text,Color colour,const float& depth);
         //void updateKeys();
+		GLFWwindow * getWindowPtr() const { return _window; };
     protected:
 
     private:
@@ -66,7 +67,7 @@ class app
         keys _keys;
         double _ypos;
         double _xpos;
-        SpriteBatch _spriteBatch;
+        //SpriteBatch _spriteBatch;
         //std::vector<Glyph> m_drawBatchs;
         glm::vec2 m_mousePos;
         std::unordered_map<std::string,texture> _textures;
