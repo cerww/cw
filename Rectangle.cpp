@@ -1,5 +1,12 @@
 #include "Rectangle.h"
 
-const texture Rectangle::flatColor = imgLoader::loadPNG("blank.png");
+texture Rectangle::flatColor;// = imgLoader::loadPNG("blank.png");
+bool Rectangle::Loaded = 0;
 
-Rectangle::Rectangle(glm::vec4 d,Color c):drawableObj(d,flatColor,c){}
+Rectangle::Rectangle(glm::vec4 d,Color c):drawableObj(d,flatColor,c){
+	if (!Loaded) {
+		Loaded = 1;
+		flatColor = imgLoader::loadPNG("blank.png");
+		m_texture = flatColor;
+	}
+}

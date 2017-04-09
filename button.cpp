@@ -12,14 +12,8 @@ button::button(glm::vec4 d, std::array<texture,3> t, std::array<Color ,3> C, std
 	m_function(f),
 	m_text(s){}
 
-
-
-
 void button::doClick() {
-
 	m_function();
-
-	//std::swap(C,C2);
 }
 
 void button::update(glm::vec2 mouseC, int t) {

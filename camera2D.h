@@ -10,7 +10,7 @@ class camera2D
 		camera2D(int screenWidth, int screenHeight);
         //virtual ~camera2D();
         void update();
-        void init(int,int);
+        void init(int,int);//avoid this if possible
         //setter
         void setPos(glm::vec2 newPos){m_pos = newPos;m_matUpdate=true;}
         void setScale(const float& newScale){m_scale = newScale;m_matUpdate=true;}
@@ -18,7 +18,7 @@ class camera2D
         glm::vec2 getPos()const {return m_pos;}
         float getScale()const{return m_scale;}
         const glm::mat4& getCamMatrix()const{return m_camMatrix;}
-        glm::vec2 screenToWorld(glm::vec2 screenCoords)const;
+        glm::vec2 scrnToWorld(glm::vec2 screenCoords)const;
     protected:
 
     private:
