@@ -2,6 +2,8 @@
 #define TEXTURE_H
 
 #include <GL/glew.h>
+#include <vector>
+
 class texture
 {
     public:

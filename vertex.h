@@ -2,6 +2,7 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 #include <GL/glew.h>
+#include <vector>
 struct Position{
 	float x;
     float y;

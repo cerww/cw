@@ -12,3 +12,11 @@ inline bool boxInBox(const glm::vec2&& p1, int width1, int height1,
 		(p2.x + width2 >= p1.x&&p1.x + width1 >= p2.x + width2&&p1.y <= p2.y + height2&&p1.y + height1 >= p2.y + height2) ||
 		(p2.x >= p1.x&&p1.x + width1 >= p2.x&&p1.y <= p2.y + height2&&p1.y + height1 >= p2.y + height2);
 }
+
+inline bool boxInBox(const glm::vec4 b1,const glm::vec4 b2) {
+	return 
+		pointInBox(b1, { b2.x,b2.y }) ||
+		pointInBox(b1, { b2.x + b2.z,b2.y }) ||
+		pointInBox(b1, { b2.x + b2.z,b2.y + b2.w }) ||
+		pointInBox(b1, { b2.x,b2.y + b2.w });
+}

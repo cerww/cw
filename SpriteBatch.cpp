@@ -5,10 +5,7 @@ SpriteBatch::SpriteBatch()
 	createVertArray();
 }
 
-SpriteBatch::~SpriteBatch()
-{
-    //dtor
-
+SpriteBatch::~SpriteBatch(){
     if(_vao)
         glDeleteVertexArrays(1,&_vao);
     if(_vbo)

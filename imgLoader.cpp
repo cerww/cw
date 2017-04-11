@@ -4,6 +4,8 @@
 #include "stdio.h"
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include "lodepng.h"
+
 imgLoader::imgLoader()
 {
     //ctor
@@ -12,13 +14,13 @@ texture imgLoader::loadPNG(const std::string &path){
     texture tex={};
     std::vector<unsigned char> in;
     std::vector<unsigned char> outpic;
-    unsigned long width,height;
+    unsigned width,height;
 
     if(!IOmanager::readFileToBuffer(path,in)){
         std::cout<<"4\n"<<std::endl;
         glfwTerminate();
     }
-    int error = decodePNG(outpic,width,height,&in[0],in.size());
+    int error = lodepng::decode(outpic,width,height,path.c_str());
     if(error){
 		std::cout << "decondPNG failed with" << error << std::endl;
         glfwTerminate();
