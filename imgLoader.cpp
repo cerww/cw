@@ -12,14 +12,14 @@ imgLoader::imgLoader()
 }
 texture imgLoader::loadPNG(const std::string &path){
     texture tex={};
-    std::vector<unsigned char> in;
+    //std::vector<unsigned char> in;
     std::vector<unsigned char> outpic;
     unsigned width,height;
-
+	/*
     if(!IOmanager::readFileToBuffer(path,in)){
         std::cout<<"4\n"<<std::endl;
         glfwTerminate();
-    }
+    }*/
     int error = lodepng::decode(outpic,width,height,path.c_str());
     if(error){
 		std::cout << "decondPNG failed with" << error << std::endl;

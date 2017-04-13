@@ -3,6 +3,9 @@ app::app(GLFWwindow* window):_window(window),_ypos(0.0f),_xpos(0.0f),_maxFPS(60)
     //_spriteBatch.init();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_ALPHA_TEST);
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     //keybourd
