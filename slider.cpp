@@ -42,7 +42,7 @@ void slider::update(glm::vec2 mouseCoords) {
 	}
 
 	//auto percentageToMax = (mouseCoords.y - m_dims.y)/(float)m_dims.w;
-	m_current = (((mouseCoords.y - m_dims.y) / ((float)m_dims.w))*(m_max - m_min)) + m_min;
+	m_current = (int)glm::round((((mouseCoords.y - m_dims.y) / ((float)m_dims.w))*(m_max - m_min))) + m_min;
 
 	m_current = std::min(m_max, m_current);
 	m_current = std::max(m_min, m_current);
