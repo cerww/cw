@@ -6,6 +6,7 @@ public:
 	static const texture& getFlatColor() {
 		if (!Loaded) {
 			flatColor = imgLoader::loadPNG("blank.png");
+			Loaded = true;
 		}
 		return flatColor;
 	};

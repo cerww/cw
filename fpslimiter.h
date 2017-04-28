@@ -18,7 +18,7 @@ class fpslimiter
 
     private:
         double _prevFrame;
-        double _maxFPS;
+        double _maxFPS = 60.0;
 };
 
 #endif // FPSLIMITER_H

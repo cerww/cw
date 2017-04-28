@@ -16,7 +16,10 @@ namespace math {
 			return angleMesurement<num2, den2>((angle*static_cast<double>(den*num2)) / static_cast<double>(num*den2));
 		}
 		constexpr uint64_t getFullRotations() const{
-			return angle*den / num;
+			return (uint64_t)angle*den / num;
+		}
+		constexpr angleMesurement<num, den> getTerminalAngle()const {
+			return { angle - (getFullRotations()*(double)num / (double)den) };
 		}
 	};
 
@@ -61,97 +64,46 @@ namespace math {
 	}
 
 	//template<uint64_t num,uint64_t den>
-	double cos(const radians angle) {
+	inline double cos(const radians angle) {
 		return std::cos(angle.angle);
 	}
 
-	double sin(const radians angle) {
+	inline double sin(const radians angle) {
 		return std::sin(angle.angle);
 	}
 
-	double tan(const radians angle) {
+	inline double tan(const radians angle) {
 		return std::tan(angle.angle);
 	}
 
-	radians acos(const double d) {
+	inline radians acos(const double d) {
 		return radians(std::acos(d));
 	}
 
-	radians asin(const double d) {
+	inline radians asin(const double d) {
 		return radians(std::asin(d));
 	}
 
-	radians atan(const double d) {
+	inline radians atan(const double d) {
 		return radians(std::atan(d));
 	}
 	
-	radians atan2(const double d1, const double d2) {
+	inline radians atan2(const double d1, const double d2) {
 		return radians(std::atan2(d1, d2));
 	}
 
 
-
-
-	/*
-	class degrees {
-	public:
-		degrees() = default;
-		degrees(double a) :angle(a) {};
-		double angle;
-
-		operator double() const {
-			return angle;
-		}
-
-
-
-	};
-	degrees&& operator+(const degrees& a, const degrees& b) {
-		return degrees(a.angle + b.angle);
-	}
-	degrees&& operator-(const degrees& a, const degrees& b) {
-		return degrees(a.angle - b.angle);
+	inline constexpr double ncos(const radians r) {
+		const auto d = r.getTerminalAngle().angle;
+		return 1 - (d*d / 2) + (d*d*d*d / 24) - (d*d*d*d*d*d / 720) + (d*d*d*d*d*d*d*d / 40320);
 	}
 
-	class radians {
-	public:
-		radians() = default;
-		radians(double a) :angle(a) {};
-		double angle;
-
-		radians&& operator=(const float d)const {
-			return radians(d);
-		}
-
-		operator double() const {
-			return angle;
-		}
-
-		operator degrees()const {
-			return degrees(angle*180.0f / 3.1415926535);
-		}
-
-	};
-
-	inline double cos(const radians r) {
-		return std::cos(r.angle);
+	inline constexpr double nsin(const radians r) {
+		const auto d = r.getTerminalAngle().angle;
+		return d - (d*d*d / 6) + (d*d*d*d*d / 120) - (d*d*d*d*d*d*d / 5040) + (d*d*d*d*d*d*d*d*d / 362880);
+	}
+	inline constexpr double ntan(const radians r) {
+		return nsin(r) / ncos(r);
 	}
 
-	inline double sin(const radians r) {
-		return std::sin(r.angle);
-	}
-
-	inline double tan(const radians r) {
-		return std::tan(r.angle);
-	}
-
-
-	inline radians arccos(double d) {
-		
-	}
-
-	inline radians arcsin(double d) {}
-
-	inline radians arctan(double d) {}
-	*/
 };

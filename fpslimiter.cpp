@@ -1,6 +1,6 @@
 #include "fpslimiter.h"
 
-fpslimiter::fpslimiter():_prevFrame(glfwGetTime()),_maxFPS(60)
+fpslimiter::fpslimiter():_prevFrame(glfwGetTime())
 {
     //ctor
 }
