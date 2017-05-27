@@ -1,5 +1,5 @@
 #pragma once
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 #include <tuple>
 #include <cmath>
 #include <glm/gtx/intersect.hpp>
@@ -7,7 +7,7 @@
 #include "mathStuff.h"
 
 inline bool pointInBox(const glm::vec4 p1,
-	const glm::vec2 p2) {
+					   const glm::vec2 p2) {
 	return (p2.x >= p1.x&&p1.x + p1.z >= p2.x&&p1.y <= p2.y&&p1.y + p1.w >= p2.y);
 }
 
@@ -27,15 +27,10 @@ inline bool boxInBox(const glm::vec4 b1, const glm::vec4 b2) {
 		pointInBox(b1, { b2.x,b2.y + b2.w });
 }
 
-inline bool inRange(double a, glm::vec2 c) {
-	//if(c.)
-	return a >= std::min(c.x, c.y) && a <= std::max(c.x, c.y);
-}
-
 inline bool inRange(const double a, double lower, double upper) {
 	if (upper < lower)
 		std::swap(upper, lower);
-	return a >= lower - 0.1 && a <= upper + 0.1;
+	return a >= lower && a <= upper;
 }
 
 inline std::tuple<glm::vec2, bool> doLinesIntersect(const glm::vec2 p1s, const glm::vec2 p1e,
@@ -52,7 +47,7 @@ inline std::tuple<glm::vec2, bool> doLinesIntersect(const glm::vec2 p1s, const g
 	//cuz math, idk how this works
 	//yay i figured out how this works
 
-	return { reVec,inRange(reVec.x,p1s.x,p1e.x) && inRange(reVec.y,p2s.y,p2e.y) || inRange(reVec.x,{ p2s.x,p2e.x }) && inRange(reVec.y,{ p1s.y,p1e.y }) }; 
+	return { reVec,inRange(reVec.x,p1s.x,p1e.x) && inRange(reVec.y,p2s.y,p2e.y) || inRange(reVec.x, p2s.x,p2e.x ) && inRange(reVec.y, p1s.y,p1e.y ) }; 
 	//cuz floating point error
 }
 

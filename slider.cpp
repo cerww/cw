@@ -29,16 +29,10 @@ void slider::draw(drawRenderer & renderer) const{
 	renderer.draw(glm::vec4(m_dims.x, m_barYCoords, m_dims.z, 10.0f), fullPicUV, barSlider.id, { 255,255,255,255 }, 1.0f);
 }
 
-/*
-
-L*(current-min)/(max-min)   ~    L is m_dims.w
-
-*/
-
-void slider::update(glm::vec2 mouseCoords) {
+bool slider::update(const glm::vec2 mouseCoords) {
 	static float prevMouseY = 2000000.0f;
 	if (mouseCoords.y == prevMouseY||!pointInBox(m_dims,mouseCoords)) {
-		return; //do nothing,m_current depends on the y coord,if it's the same as the previsous, it won't change
+		return false; //do nothing,m_current depends on the y coord,if it's the same as the previsous, it won't change
 	}
 
 	//auto percentageToMax = (mouseCoords.y - m_dims.y)/(float)m_dims.w;
@@ -49,5 +43,6 @@ void slider::update(glm::vec2 mouseCoords) {
 
 	m_barYCoords = m_dims.y + m_dims.w*(m_current - m_min) / (m_max - m_min) - 5;
 	prevMouseY = mouseCoords.y;
+	return true;
 }
 

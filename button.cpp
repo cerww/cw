@@ -19,10 +19,10 @@ void button::doClick() {
 void button::update(glm::vec2 mouseC, int t) {
 	if (pointInBox(m_dims, mouseC)) {
 		if (t) {
-			m_currentState = state::CLICKED;
 			if (t == 1) {
 				doClick();
 			}
+			m_currentState = state::CLICKED;
 			m_texture = m_clickTexture;
 			m_color = m_clickColor;
 		}else {

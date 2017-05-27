@@ -1,7 +1,5 @@
 #pragma once
 #include <cmath>
-#include <ratio>
-
 
 namespace math {
 
@@ -91,8 +89,7 @@ namespace math {
 	inline radians atan2(const double d1, const double d2) {
 		return radians(std::atan2(d1, d2));
 	}
-
-
+	
 	inline constexpr double ncos(const radians r) {
 		const auto d = r.getTerminalAngle().angle;
 		return 1 - (d*d / 2) + (d*d*d*d / 24) - (d*d*d*d*d*d / 720) + (d*d*d*d*d*d*d*d / 40320);

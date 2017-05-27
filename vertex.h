@@ -37,7 +37,7 @@ struct Vertex{
 		uv.u=u;
 		uv.v=v;
     }
-    void setPosition(const float &x,const float &y){
+    void setPosition(const float x,const float y){
 		pos.x=x;
 		pos.y=y;
     }
