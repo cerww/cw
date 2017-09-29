@@ -1,5 +1,7 @@
 #include "animatedObj.h"
 #include <iostream>
+
+
 void renderAnimatedObjects::render(const camera2D& cam){
     glslProg.use();
 
@@ -25,8 +27,7 @@ void renderAnimatedObjects::drawObj(animatedObj* obj){
     if(obj->currentAni==nullptr){
         return;
     }
-    //std::cout<<'a'<<'\n';
-    obj->update();
+	obj->update();
     spriteB.draw(obj->m_dims,obj->uv,obj->m_texture.id,Color(255,255,255,255),1.0f);
 }
 
@@ -71,7 +72,7 @@ void animatedObj::setPart(const std::string& partName){
 }
 
 void animatedObj::update() {
-	if (currentAni == nullptr) {
+	if (!currentAni) {
 		return;
 	}
 	++m_currentFrame;
@@ -110,7 +111,7 @@ void animatedObj::getAniInfo(const std::string& animationInfo) {
 		current = animationInfo.find('\n', current + 1);
 		m_frameH = atoi(animationInfo.substr(ocurrent, current - ocurrent).c_str());
 		while (current < animationInfo.size() - 3) {
-			//std::cout<<"abc"<<std::endl;
+
 			ocurrent = (unsigned)current + 1;
 			current = animationInfo.find(' ', current + 1);
 			std::string aniName = animationInfo.substr(ocurrent, current - ocurrent);
@@ -139,7 +140,7 @@ void animatedObj::getAniInfo(const std::string& animationInfo) {
 	catch(...){
 		//somehow crash
 		//std::cout << e << std::endl;
-		std::cout << animationInfo << " is not a valid file" << std::endl;
+		std::cout << animationInfo << " is not valid" << std::endl;
 		currentAni = nullptr;
 		return;
 	}

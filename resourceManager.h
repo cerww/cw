@@ -10,7 +10,6 @@
 class resourceManager
 {
     public:
-        resourceManager();
         static const texture& getTexture(const std::string&);
         static std::string getFileConts(const std::string&);
         //virtual ~resourceManager();

@@ -4,19 +4,15 @@
 #include <GL/glew.h>
 #include <vector>
 
-class texture
+struct texture
 {
-    public:
         texture() = default;
 		texture(GLuint tid, int twidth, int theight):
 		        id(tid),width(twidth),height(theight){}
 
         GLuint id;
-        int width;
-        int height;
-    protected:
-
-    private:
+        unsigned width;
+        unsigned height;
 
 };
 

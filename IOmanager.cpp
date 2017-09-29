@@ -17,9 +17,5 @@ bool IOmanager::readFileToBuffer(const std::string& filePath,std::vector<unsigne
     file.close();
     return true;
 }
-IOmanager::IOmanager()
-{
-    //ctor
-}
 
 

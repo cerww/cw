@@ -2,19 +2,12 @@
 #include <fstream>
 #include <algorithm>
 #include <utility>
-resourceManager::resourceManager()
-{
-    //ctor
-}
-
 
 const texture& resourceManager::getTexture(const std::string& dir){
     static std::unordered_map<std::string,const texture> m_texturesa;
     auto it= m_texturesa.find(dir);
     if(it==m_texturesa.end()){
-        return (m_texturesa.insert(std::make_pair(dir,std::move(imgLoader::loadPNG(dir)))).first->second);
-        //m_texturesa[dir] = std::move(imgLoader::loadPNG(dir));
-        //return &m_texturesa[dir];
+        return (m_texturesa.insert(std::make_pair(dir,imgLoader::loadPNG(dir))).first->second);
     }
     return (it->second);
 }

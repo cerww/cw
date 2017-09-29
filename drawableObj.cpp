@@ -31,13 +31,20 @@ void drawableObj::draw(drawRenderer & renderer)const{
 	renderer.spriteB.draw(m_dims,m_uv,m_texture.id,m_color,1.0f);
 }
 
-
 void drawRenderer::draw(const drawableObj* obj){
     spriteB.draw(obj->m_dims,obj->m_uv,obj->m_texture.id,obj->m_color,1.0f);
 }
 
+void drawRenderer::draw(const drawableObj& obj) {
+	spriteB.draw(obj.m_dims, obj.m_uv, obj.m_texture.id, obj.m_color, 1.0f);
+}
+
 void drawRenderer::draw(const glm::vec4 a, const glm::vec4 b, const GLuint c, const Color d, GLfloat e){
 	spriteB.draw(a, b, c, d, e);
+}
+
+void drawRenderer::draw(const glm::vec4 a, const glm::vec4 b, const GLuint c, const Color d, GLfloat e, math::radians angle){
+	spriteB.draw(a, b, c, d, e, angle);
 }
 
 void drawRenderer::render(const camera2D& cam){

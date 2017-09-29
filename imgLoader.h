@@ -5,7 +5,6 @@
 class imgLoader
 {
     public:
-        imgLoader();
         static texture loadPNG(const std::string &path);
     protected:
 

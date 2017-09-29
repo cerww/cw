@@ -41,12 +41,11 @@ class animatedObj{
         enum class animationMode{REPEAT,STAY,END};
         struct framey{
             framey() = default;
-            framey(int a,int y,animationMode m,int sp):start(a),num(y),mode(m),speed(sp){};
+			framey(int a, int y, animationMode m, int sp) :start(a), num(y), mode(m), speed(sp) {};
             int start;
             int num;
             animationMode mode;
             int speed;
-            //=animationMode::REPEAT;
         };
         uint16_t m_currentFrame;
         uint16_t m_endingFrame;

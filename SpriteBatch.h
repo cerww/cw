@@ -8,14 +8,16 @@
 #include <memory>
 #include <cstdlib>
 #include <algorithm>
+#include "mathStuff.h"
+
 enum class glyphSortType{
 NONE,FRONT_TO_BACK,BACK_TO_FRONT,TEXT
 };
 class Glyph{
 public:
     Glyph(){};
-    Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint text,Color colour,const float& depth);
-    Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint text,Color colour,const float& depth,const float&angle);
+    Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint text,Color colour,float depth);
+    Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint text,Color colour,float depth,math::radians angle);
     GLuint text;
     float depth;
     Vertex topLeft;
@@ -23,7 +25,7 @@ public:
     Vertex botRight;
     Vertex topRight;
 private:
-    glm::vec2 rotate(glm::vec2 dir,float angle);
+    glm::vec2 rotate(glm::vec2 dir,math::radians angle);
 };
 struct renderBatchs{
     renderBatchs(GLuint Offset,GLuint NumVerts,GLuint Text):offset(Offset),numVerts(NumVerts),text(Text){};
@@ -39,7 +41,7 @@ class SpriteBatch
         //void init();
         void begin(glyphSortType s=glyphSortType::TEXT);
         void end();
-        void draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,float angle);
+        void draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,math::radians angle);
         void draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,glm::vec2 dir);
         void draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth);
         void renderBatch();

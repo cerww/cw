@@ -10,15 +10,14 @@
 class button:private drawableObj {
 public:
 	button() = default;
-	//button(glm::vec4, texture, Color C, fn f, Color C2);
 	button(glm::vec4, std::array<texture,3> t, std::array<Color,3> C, std::function<void()> f,const std::string&);
 
 	//template<typename ... Args>
 	void doClick();
 	const auto& getText() const { return m_text; };
 
-	void setText(const std::string& s) {
-		m_text = s;
+	void setText(std::string s) {
+		m_text = std::move(s);
 	}
 	
 	void setNormalTexture(texture t) {

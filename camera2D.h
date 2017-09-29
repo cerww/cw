@@ -13,7 +13,7 @@ class camera2D
         void init(int,int);//avoid this if possible
         //setter
         void setPos(glm::vec2 newPos){m_pos = newPos;m_matUpdate=true;}
-        void setScale(const float& newScale){m_scale = newScale;m_matUpdate=true;}
+        void setScale(const float newScale){m_scale = newScale;m_matUpdate=true;}
         //getter
         glm::vec2 getPos()const {return m_pos;}
         float getScale()const{return m_scale;}

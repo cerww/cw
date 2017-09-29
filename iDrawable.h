@@ -5,4 +5,4 @@ public:
 	//virtual void draw()
 	//XD
 };
-//i have no  idea waht this is for
+//i have no idea waht this is for

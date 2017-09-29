@@ -1,30 +1,11 @@
 #ifndef IGAMESCREEN_H
 #define IGAMESCREEN_H
+#include <vector>
 
-
-class iGameScreen
-{
-    enum class screenState{
-        NONE,
-        RUNNING,
-        EXIT,
-        CHANGE_NEXT,
-        CHANGE_PREV
-    };
-    public:
-        iGameScreen();
-        virtual ~iGameScreen();
-        virtual void build() = 0;
-        virtual void destroy() = 0;
-        virtual void draw() = 0;
-        virtual void update() = 0;
-		screenState getState()const {};
-    protected:
-
-        int m_index = -1;
-        screenState m_currentState = screenState::NONE;
-        //iGame* m_game = nullptr;
-    private:
+class iGameScreen{    
+    public:        
+    virtual void draw() = 0;
+    virtual std::pair<std::vector<int>,std::vector<int>>update() = 0;//things to delete, things to add
 };
 
 #endif // IGAMESCREEN_H

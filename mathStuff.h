@@ -2,7 +2,6 @@
 #include <cmath>
 
 namespace math {
-
 	template<uint64_t num, uint64_t den = 1>
 	struct angleMesurement {
 		constexpr angleMesurement() = default;
@@ -22,22 +21,22 @@ namespace math {
 	};
 
 	template<uint64_t num, uint64_t den>
-	constexpr angleMesurement<num, den>&& operator+(const angleMesurement<num, den>& a, const angleMesurement<num, den>& b) {
+	constexpr angleMesurement<num, den> operator+(const angleMesurement<num, den>& a, const angleMesurement<num, den>& b) {
 		return angleMesurement<num, den>(a.angle + b.angle);
 	}
 	
 	template<uint64_t num, uint64_t den, uint64_t num2, uint64_t den2>
-	constexpr angleMesurement<num, den>&& operator+(const angleMesurement<num, den>& a, const angleMesurement<num2, den2>& b) {
+	constexpr angleMesurement<num, den> operator+(const angleMesurement<num, den>& a, const angleMesurement<num2, den2>& b) {
 		return angleMesurement<num, den>(a.angle + angleMesurement<num, den>(b).angle);
 	}
 
 	template<uint64_t num, uint64_t den>
-	constexpr angleMesurement<num, den>&& operator-(const angleMesurement<num, den>& a, const angleMesurement<num, den>& b) {
+	constexpr angleMesurement<num, den> operator-(const angleMesurement<num, den>& a, const angleMesurement<num, den>& b) {
 		return angleMesurement<num, den>(a.angle - b.angle);
 	}
 
 	template<uint64_t num, uint64_t den, uint64_t num2, uint64_t den2>
-	constexpr angleMesurement<num, den>&& operator-(const angleMesurement<num, den>& a, const angleMesurement<num2, den2>& b) {
+	constexpr angleMesurement<num, den> operator-(const angleMesurement<num, den>& a, const angleMesurement<num2, den2>& b) {
 		return angleMesurement<num, den>(a.angle - angleMesurement<num, den>(b).angle);
 	}
 

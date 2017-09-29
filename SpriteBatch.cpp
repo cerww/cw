@@ -1,5 +1,6 @@
 #include "SpriteBatch.h"
 #include <iostream>
+
 SpriteBatch::SpriteBatch()
 {
 	createVertArray();
@@ -27,9 +28,8 @@ void SpriteBatch::end(){
     sortGlyph();
 
     createRenderBatches();
-    //std::cout<<_glyphPtrs.size()<<'\n';
 }
-Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color colour,const float& depthy):
+Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color colour,float depthy):
     text(texty),
     depth(depthy){
     topLeft.color=colour;
@@ -52,19 +52,19 @@ Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color 
     botRight.pos.y = dimensions.y;
     botRight.setUV(uv.x+uv.z,uv.y);
 }
-Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color colour,const float& depthy,const float& angle):
+Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color colour,float depthy,math::radians angle):
     text(texty),
     depth(depthy){
-    glm::vec2 half(dimensions.z/2,dimensions.w/2);
+    glm::vec2 half(dimensions.z/2.0f,dimensions.w/2.0f);
     glm::vec2 tl(-half.x,half.y);
     glm::vec2 bl(-half.x,-half.y);
     glm::vec2 tr(half.x,half.y);
     glm::vec2 br(half.x,-half.y);
 
-    tl = rotate(tl,angle)+half;
-    bl = rotate(bl,angle)+half;
-    br = rotate(br,angle)+half;
-    tr = rotate(tr,angle)+half;
+	tl = rotate(tl, angle) + half;
+	bl = rotate(bl, angle) + half;
+	br = rotate(br, angle) + half;
+	tr = rotate(tr, angle) + half;
 
     topLeft.color=colour;
     topLeft.pos.x = dimensions.x+tl.x;
@@ -89,21 +89,19 @@ Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color 
 void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth){
     _glyphs.emplace_back(dimensions,uv,text,colour,depth);
 }
-void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,float angle){
-    _glyphs.emplace_back(dimensions,uv,text,colour,depth,angle);
+void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,math::radians angle){
+	_glyphs.emplace_back(dimensions, uv, text, colour, depth, angle);
 }
 void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,glm::vec2 dir){
     const glm::vec2 right(1.0,0.0);
 
     _glyphs.emplace_back(dimensions,uv,text,colour,depth,((dir.y<0.0f)?-1.0f:1.0f)*acos(glm::dot(glm::vec2(1.0f,0.0f),dir)));
 }
-glm::vec2 Glyph::rotate(glm::vec2 dir,float angle){
-    return glm::vec2(dir.x*cos(angle)-dir.y*sin(angle),dir.x*sin(angle)-dir.y*cos(angle));
+glm::vec2 Glyph::rotate(glm::vec2 dir,math::radians angle){
+	return glm::vec2(dir.x*math::cos(angle) - dir.y*math::sin(angle),
+			   		 dir.x*math::sin(angle) + dir.y*math::cos(angle));
 }
 void SpriteBatch::renderBatch(){
-    /*for(auto i:_renderBatchs){
-        glBindTexture(GL_TEXTURE_2D,_renderBatchs[i]->text);
-    }*/
     glBindVertexArray(_vao);
     for(int i = 0;i<(int)_renderBatchs.size();++i){
         glBindTexture(GL_TEXTURE_2D,_renderBatchs[i].text);
@@ -114,8 +112,7 @@ void SpriteBatch::renderBatch(){
 
 void SpriteBatch::createRenderBatches(){
     if(_glyphs.empty()) return;
-    std::vector<Vertex> vertices;
-    vertices.resize(_glyphs.size()*6);
+    std::vector<Vertex> vertices(_glyphs.size()*6);
     //renderBatch newBatch(0,6,_glyphs[0]->text);
     _renderBatchs.emplace_back(0,6,_glyphs[0].text);
     int cv = 0;

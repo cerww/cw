@@ -9,7 +9,7 @@ public:
 	int getVal()const { return m_current; };
 	glm::vec4 getDims()const { return m_dims; };
 	void draw(drawRenderer&)const;
-	bool update(glm::vec2);
+	bool update(glm::vec2,int);
 private:
 	static texture bar;// = imgLoader::loadPNG("sliderBar.png");
 	static texture barSlider;// = imgLoader::loadPNG("sliderThing.png");
@@ -19,5 +19,6 @@ private:
 	int m_min = 0;
 	int m_max = 100;
 	float m_barYCoords;
-	int m_current;
+	int m_current; 
+	float m_prevMouseY = 2000000.0f;
 };
