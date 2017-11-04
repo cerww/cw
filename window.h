@@ -1,6 +1,6 @@
 #pragma once
-#ifndef APP_H
-#define APP_H
+#ifndef CW_WINDOW_H
+#define CW_WINDOW_H
 #include <map>
 #include <unordered_map>
 #include <vector>
@@ -21,9 +21,9 @@
 #include <array>
 #include "Event.h"
 
-class app{//just a window, and the keys/mouse
+class window{//just a window, and the keys/mouse
     public:
-        app(GLFWwindow* );
+		window(GLFWwindow* );
         void update();
         int getKey(Keys key)const;
         glm::vec2 getMousePos()const;
@@ -38,21 +38,19 @@ class app{//just a window, and the keys/mouse
 		uint32_t getCodePoint(){
 			return std::exchange(m_codePoint,0);
 		};
+		static void initialize();
     private:
 		struct keys {
-			//std::unordered_map<Keys, int> k;
 			std::array<uint16_t, (size_t)Keys::MAX> k = {};
-			//std::unordered_map<mouseB, int> m;
 			std::array<uint16_t,(size_t)mouseB::MAX> m = {};
 		};
-        //void test();
         GLFWwindow* _window;
         keys _keys;
         glm::dvec2 m_mousePos;
         std::unordered_map<std::string,texture> _textures;
         fpslimiter _fpsLimiter;
 		uint32_t m_codePoint = 0;
-		static std::unordered_map<GLFWwindow*, app*> m_refs;//for code points
+		static std::unordered_map<GLFWwindow*, window*> m_refs;//for code points
 };
 
-#endif // APP_H
+#endif // CW_WINDOW_H

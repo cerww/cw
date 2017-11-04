@@ -115,7 +115,7 @@ inline constexpr T clamp(T lb,T ub,T thing) {
 
 template<typename T,typename comp>
 inline constexpr T clamp(T lb, T ub, T thing,comp c) {
-	return c(thing, lb) ? lb : comp(ub, thing) ? ub : thing;
+	return c(thing, lb) ? lb : c(ub, thing) ? ub : thing;
 }
 
 inline glm::vec2 unitVec(math::radians r) {

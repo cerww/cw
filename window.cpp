@@ -1,8 +1,8 @@
-#include "app.h"
+#include "window.h"
 
-std::unordered_map<GLFWwindow*, app*> app::m_refs = {};
+std::unordered_map<GLFWwindow*, window*> window::m_refs = {};
 
-app::app(GLFWwindow* window):_window(window){
+window::window(GLFWwindow* window):_window(window){
 
 	glfwMakeContextCurrent(window);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -15,7 +15,6 @@ app::app(GLFWwindow* window):_window(window){
 	}
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //_spriteBatch.init();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_CULL_FACE);
@@ -24,34 +23,34 @@ app::app(GLFWwindow* window):_window(window){
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
 	glfwSetCharCallback(_window, [](GLFWwindow* win,uint32_t t_codePoint) {
-		app::setCodePoint(win, t_codePoint);
+		window::setCodePoint(win, t_codePoint);
 	});
 	m_refs[window] = this;
 }
 
-int app::getKey(Keys key)const {
+int window::getKey(Keys key)const {
     return _keys.k[(int)key];
 }
 
-int app::getMouseButton(mouseB Button)const{
+int window::getMouseButton(mouseB Button)const{
     return _keys.m[(int)Button];
 }
 
-glm::vec2 app::getMousePos()const{
+glm::vec2 window::getMousePos()const{
     return m_mousePos;
 }
 
-void app::setMaxFPS(int newfps){
+void window::setMaxFPS(int newfps){
 	_fpsLimiter.setMaxFPS(newfps);
 }
-texture app::getTexture(const std::string &textname){
+texture window::getTexture(const std::string &textname){
     auto it= _textures.find(textname);
     if(it==_textures.end()){
         _textures[textname]=imgLoader::loadPNG(textname);
     }return _textures[textname];
 }
 
-void app::update(){
+void window::update(){
     glfwSwapBuffers(_window);
     /* Poll for and process events */
     glfwPollEvents();
@@ -106,7 +105,20 @@ void app::update(){
 	if (glfwGetKey(_window, GLFW_KEY_RIGHT_SHIFT)) ++_keys.k[(int)Keys::RSHIFT]; else { _keys.k[(int)Keys::RSHIFT] = 0; }
 	if (glfwGetKey(_window, GLFW_KEY_LEFT_SHIFT)) ++_keys.k[(int)Keys::LSHIFT]; else { _keys.k[(int)Keys::LSHIFT] = 0; }
 }
-void app::wait(){
+void window::wait(){
     _fpsLimiter.limitFPS();
 
+}
+
+void window::initialize(){
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	if (glewInit() != GLEW_OK) {
+		std::cout << "glew failed to init" << std::endl;
+		glfwTerminate();
+	}
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

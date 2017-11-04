@@ -1,6 +1,6 @@
 #ifndef ANIMATEDOBJ_H
 #define ANIMATEDOBJ_H
-#include "app.h"
+#include "window.h"
 #include <vector>
 #include <array>
 #include <string>
@@ -47,8 +47,8 @@ class animatedObj{
             animationMode mode;
             int speed;
         };
-        uint16_t m_currentFrame;
-        uint16_t m_endingFrame;
+        uint64_t m_currentFrame;
+        uint64_t m_endingFrame;
         std::string m_currentPart;
         framey* currentAni=nullptr;
         std::unordered_map<std::string,framey> m_animations;
