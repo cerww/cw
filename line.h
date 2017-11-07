@@ -13,3 +13,9 @@ private:
 	Color m_color;
 	size_t m_width;
 };
+
+constexpr bool ROUNDED_LINE = false;
+constexpr bool BLOCKY_LINE = true;
+
+template<bool type>
+void drawLine(drawRenderer&, glm::vec2 p1, glm::vec2 p2, Color color, size_t width);

@@ -41,9 +41,10 @@ class SpriteBatch
         //void init();
         void begin(glyphSortType s=glyphSortType::TEXT);
         void end();
-        void draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,math::radians angle);
-        void draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,glm::vec2 dir);
-        void draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth);
+		void draw(glm::vec4 dimensions, glm::vec4 uv, GLuint text, Color colour, float depth, math::radians angle,glm::vec2 offSetAfterRotation);
+		void draw(glm::vec4 dimensions, glm::vec4 uv, GLuint text, Color colour, float depth, math::radians angle);
+		void draw(glm::vec4 dimensions, glm::vec4 uv, GLuint text, Color colour, float depth, glm::vec2 dir);
+		void draw(glm::vec4 dimensions, glm::vec4 uv, GLuint text, Color colour, float depth);
         void renderBatch();
 
     protected:

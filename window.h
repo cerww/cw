@@ -36,13 +36,13 @@ class window{//just a window, and the keys/mouse
 			m_refs[win]->m_codePoint = t_codePoint;
 		}
 		uint32_t getCodePoint(){
-			return std::exchange(m_codePoint,0);
+			return std::exchange(m_codePoint,0);//i have to get rid of code point somewhere
 		};
 		static void initialize();
     private:
 		struct keys {
-			std::array<uint16_t, (size_t)Keys::MAX> k = {};
-			std::array<uint16_t,(size_t)mouseB::MAX> m = {};
+			std::array<int32_t, (size_t)Keys::MAX> k = {};
+			std::array<int32_t, (size_t)mouseB::MAX> m = {};
 		};
         GLFWwindow* _window;
         keys _keys;

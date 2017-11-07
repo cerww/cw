@@ -10,15 +10,11 @@
 class button:private drawableObj {
 public:
 	button() = default;
-	button(glm::vec4, std::array<texture,3> t, std::array<Color,3> C, std::function<void()> f,const std::string&);
+	button(glm::vec4, std::array<texture, 3> t, std::array<Color, 3> C, std::function<void()> f);
 
+	button(glm::vec4, texture t, Color C, std::function<void()> f);
 	//template<typename ... Args>
 	void doClick();
-	const auto& getText() const { return m_text; };
-
-	void setText(std::string s) {
-		m_text = std::move(s);
-	}
 	
 	void setNormalTexture(texture t) {
 		m_normalTexture = std::move(t);
@@ -47,7 +43,6 @@ public:
 	using drawableObj::draw;
 	void update(const glm::vec2,int);
 protected:
-
 	Color m_normalColor;
 	texture m_normalTexture;
 
@@ -56,9 +51,6 @@ protected:
 
 	Color m_clickColor;
 	texture m_clickTexture;
-
-	std::string m_text;
-
 private:
 	enum class state {NORMAL,HOVER,CLICKED};
 	std::function<void()> m_function;

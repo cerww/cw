@@ -86,17 +86,31 @@ Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color 
     botRight.pos.y = dimensions.y+br.y;
     botRight.setUV(uv.x+uv.z,uv.y);
 }
-void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth){
+void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,float depth){
     _glyphs.emplace_back(dimensions,uv,text,colour,depth);
 }
-void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,math::radians angle){
+void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,float depth,math::radians angle){
 	_glyphs.emplace_back(dimensions, uv, text, colour, depth, angle);
 }
-void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,const float& depth,glm::vec2 dir){
+void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,float depth,glm::vec2 dir){
     const glm::vec2 right(1.0,0.0);
 
     _glyphs.emplace_back(dimensions,uv,text,colour,depth,((dir.y<0.0f)?-1.0f:1.0f)*acos(glm::dot(glm::vec2(1.0f,0.0f),dir)));
 }
+
+void SpriteBatch::draw(glm::vec4 dimensions, glm::vec4 uv, GLuint text, Color colour, float  depth, math::radians angle, glm::vec2 offSetAfterRotation){
+	Glyph& thing = _glyphs.emplace_back(dimensions, uv, text, colour, depth, angle);
+	thing.botLeft.pos.x -= offSetAfterRotation.x;
+	thing.botRight.pos.x -= offSetAfterRotation.x;
+	thing.topLeft.pos.x -= offSetAfterRotation.x;
+	thing.topRight.pos.x -= offSetAfterRotation.x;
+
+	thing.botLeft.pos.y -= offSetAfterRotation.y;
+	thing.botRight.pos.y -= offSetAfterRotation.y;
+	thing.topLeft.pos.y -= offSetAfterRotation.y;
+	thing.topRight.pos.y -= offSetAfterRotation.y;
+}
+
 glm::vec2 Glyph::rotate(glm::vec2 dir,math::radians angle){
 	return glm::vec2(dir.x*math::cos(angle) - dir.y*math::sin(angle),
 			   		 dir.x*math::sin(angle) + dir.y*math::cos(angle));

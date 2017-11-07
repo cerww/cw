@@ -12,11 +12,13 @@ class drawableObj;
 class drawRenderer :public renderer {
 public:
 	drawRenderer();
-	virtual void draw(const drawableObj*);
-	virtual void draw(const drawableObj&);
-	virtual void draw(const glm::vec4, const glm::vec4, const GLuint, const Color, GLfloat);
-	virtual void draw(const glm::vec4, const glm::vec4, const GLuint, const Color, GLfloat,math::radians);
-	void render(const camera2D& cam) override;
+	template<typename ...args>
+	void draw(args...);
+	
+	void draw(const drawableObj*);
+	void draw(const drawableObj&);
+	
+	void render(const camera2D& cam) override final;
 	friend class drawableObj;
 
 };
@@ -25,8 +27,8 @@ public:
 class drawableObj:public iDrawable
 {
     public:
-        drawableObj(glm::vec4&&,const std::string& file,Color = { 255,255,255,255 });
-        drawableObj(glm::vec4&,const std::string& file, Color = { 255,255,255,255 });
+        drawableObj(glm::vec4&&,std::string file,Color = { 255,255,255,255 });
+        drawableObj(glm::vec4&,std::string file, Color = { 255,255,255,255 });
 
 		drawableObj(glm::vec4&&, const texture& file, Color = {255,255,255,255});
 		drawableObj(glm::vec4&, const texture& file, Color = { 255,255,255,255 });

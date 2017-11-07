@@ -1,6 +1,6 @@
 #include "button.h"
 
-button::button(glm::vec4 d, std::array<texture,3> t, std::array<Color ,3> C, std::function<void()> f,const std::string& s) :
+button::button(glm::vec4 d, std::array<texture,3> t, std::array<Color ,3> C, std::function<void()> f) :
 	drawableObj(d, t[0], C[0]),
 	m_normalTexture(t[0]),
 	m_normalColor(C[0]),
@@ -8,8 +8,19 @@ button::button(glm::vec4 d, std::array<texture,3> t, std::array<Color ,3> C, std
 	m_hoverColor(C[1]),
 	m_clickTexture(t[2]),
 	m_clickColor(C[2]),
-	m_function(f),
-	m_text(s){}
+	m_function(f)
+	{}
+
+button::button(glm::vec4 d, texture t, Color C, std::function<void()> f) :
+	drawableObj(d, t, C),
+	m_normalTexture(t),
+	m_normalColor(C),
+	m_hoverTexture(t),
+	m_hoverColor(C),
+	m_clickTexture(t),
+	m_clickColor(C),
+	m_function(f)
+	{}
 
 void button::doClick() {
 	m_function();

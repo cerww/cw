@@ -15,11 +15,10 @@ window::window(GLFWwindow* window):_window(window){
 	}
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA_TEST);
+
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
 	glfwSetCharCallback(_window, [](GLFWwindow* win,uint32_t t_codePoint) {
@@ -41,7 +40,7 @@ glm::vec2 window::getMousePos()const{
 }
 
 void window::setMaxFPS(int newfps){
-	_fpsLimiter.setMaxFPS(newfps);
+	_fpsLimiter.fps = newfps;
 }
 texture window::getTexture(const std::string &textname){
     auto it= _textures.find(textname);
