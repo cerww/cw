@@ -14,8 +14,10 @@ private:
 	size_t m_width;
 };
 
-constexpr bool ROUNDED_LINE = false;
-constexpr bool BLOCKY_LINE = true;
+enum class line_type {
+	ROUND,
+	BLOCK
+};
 
-template<bool type>
+template<line_type type>
 void drawLine(drawRenderer&, glm::vec2 p1, glm::vec2 p2, Color color, size_t width);
