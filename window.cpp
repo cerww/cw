@@ -15,6 +15,7 @@ window::window(GLFWwindow* window):_window(window){
 	}
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA_TEST);
@@ -23,6 +24,9 @@ window::window(GLFWwindow* window):_window(window){
     glfwGetFramebufferSize(window, &width, &height);
 	glfwSetCharCallback(_window, [](GLFWwindow* win,uint32_t t_codePoint) {
 		window::setCodePoint(win, t_codePoint);
+	});
+	glfwSetScrollCallback(_window, [](GLFWwindow* win, double x, double y) {
+		
 	});
 	m_refs[window] = this;
 }
@@ -49,9 +53,11 @@ texture window::getTexture(const std::string &textname){
     }return _textures[textname];
 }
 
+
 void window::update(){
     glfwSwapBuffers(_window);
     /* Poll for and process events */
+	m_scrolled = {};
     glfwPollEvents();
     glfwGetCursorPos(_window,&m_mousePos.x,&m_mousePos.y);
 	//std::vector<event> events;

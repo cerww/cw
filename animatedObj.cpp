@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-void renderAnimatedObjects::render(const camera2D& cam){
+void renderAnimatedObjects::Render(const camera2D& cam){
     glslProg.use();
 
     spriteB.end();

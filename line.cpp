@@ -2,17 +2,17 @@
 #include "circle.h"
 #include <glm\trigonometric.hpp>
 
-void line::draw(drawRenderer& renderer){
+void line::Draw(drawRenderer& renderer){
 	const math::radians angle = math::atan2((m_p1 - m_p2).x, (m_p1 - m_p2).y);
 	drawLine<line_type::BLOCK>(renderer, m_p1,m_p2,m_color,m_width);
 }
 
 template<line_type type>
-void drawLine(drawRenderer & renderer, glm::vec2 p1, glm::vec2 p2, Color color, size_t width){
+void drawLine(drawRenderer & renderer,const glm::vec2 p1,const glm::vec2 p2,const Color color,const size_t width){
 	const math::radians angle = math::atan2((p1 - p2).x, (p1 - p2).y);
-	auto length = glm::length(p1 - p2);
+	const double length = glm::length(p1 - p2);
 	renderer.draw(	glm::vec4{ p1.x,p1.y,width,length },
-					fullPicUV,
+		defaultUV,
 					Rectangle::getFlatColor().id,
 					color,
 					1.0f, 

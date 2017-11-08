@@ -11,7 +11,6 @@ SpriteBatch::~SpriteBatch(){
         glDeleteVertexArrays(1,&_vao);
     if(_vbo)
         glDeleteBuffers(1,&_vbo);
-
 }
 
 void SpriteBatch::begin(glyphSortType s/*TEXTURE default */){

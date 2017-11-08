@@ -2,7 +2,7 @@
 #include "drawableObj.h"
 
 
-class circle
+class circle:public Drawable<circle>
 {
 public:
 	circle();
@@ -12,7 +12,7 @@ public:
 	glm::vec2 spot = {};
 	double radius = 0;
 	Color colour = {};
-	void draw(drawRenderer&)const;
+	void Draw(drawRenderer&)const;
 private:
 	static texture s_circle;
 	static void loadCircle(){

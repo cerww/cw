@@ -35,9 +35,15 @@ class window{//just a window, and the keys/mouse
 		static void setCodePoint(GLFWwindow* win, uint32_t t_codePoint) {
 			m_refs[win]->m_codePoint = t_codePoint;
 		}
+		static void setScrolled(GLFWwindow* win,double x,double y){
+			m_refs[win]->m_scrolled = { x,y };
+		}
 		uint32_t getCodePoint(){
 			return std::exchange(m_codePoint,0);//i have to get rid of code point somewhere
 		};
+		std::pair<double,double> getScrolled()const {
+			return m_scrolled;
+		}
 		static void initialize();
     private:
 		struct keys {
@@ -51,6 +57,7 @@ class window{//just a window, and the keys/mouse
         fpslimiter _fpsLimiter;
 		uint32_t m_codePoint = 0;
 		static std::unordered_map<GLFWwindow*, window*> m_refs;//for code points
+		std::pair<double, double> m_scrolled;
 };
 
 #endif // CW_WINDOW_H

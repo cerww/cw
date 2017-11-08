@@ -63,16 +63,17 @@ class animatedObj{
         texture m_texture;
         glm::vec4 uv = glm::vec4(0.0f,0.0f,1.0f,1.0f);
 };
-class renderAnimatedObjects:public renderer{
+class renderAnimatedObjects:public renderer<renderAnimatedObjects>{
     public:
         renderAnimatedObjects();
         //renderAnimatedObjects();
         //renderAnimatedObjects();
-        void render(const camera2D& cam) override;
+        void Render(const camera2D& cam);
         virtual void drawObj(animatedObj *);
         //void start(){spriteB.begin();};
     private:
         std::vector<animatedObj*> m_objs;
-        //void getAni
+		GLSLthingy glslProg;
+		SpriteBatch spriteB;
 };
 #endif // ANIMATEDOBJ_H
