@@ -5,7 +5,7 @@
 void renderAnimatedObjects::Render(const camera2D& cam){
     glslProg.use();
 
-    spriteB.end();
+    spriteB.stop();
 
     glActiveTexture(GL_TEXTURE0);
     GLint textlocate = glslProg.getUniformLocate("Text");
@@ -19,7 +19,7 @@ void renderAnimatedObjects::Render(const camera2D& cam){
 
     glslProg.unuse();
 
-    spriteB.begin();
+    spriteB.start();
 }
 
 void renderAnimatedObjects::drawObj(animatedObj* obj){
@@ -50,7 +50,7 @@ renderAnimatedObjects::renderAnimatedObjects(){
     glslProg.linkshader();
 
     //spriteB.init();
-    spriteB.begin();
+    spriteB.start();
 }
 
 void animatedObj::setPart(const std::string& partName){

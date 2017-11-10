@@ -28,10 +28,9 @@ void slider::Draw(drawRenderer & renderer) const{
 }
 
 bool slider::update(const glm::vec2 mouseCoords,int n) {	
-	if (!n || mouseCoords.y == m_prevMouseY || !pointInBox(m_dims, mouseCoords)) {
+	if (!n || mouseCoords.y == m_prevMouseY || !pointInBox(m_dims, mouseCoords)) 
 		return false; //do nothing,m_current depends on the y coord,if it's the same as the previsous, it won't change
-	}
-
+	
 	m_current = clamp(m_min,m_max,(int)glm::round((((mouseCoords.y - m_dims.y) / ((float)m_dims.w))*(m_max - m_min))) + m_min);
 
 	m_barYCoords = m_dims.y + m_dims.w*(m_current - m_min) / (m_max - m_min) - 5;

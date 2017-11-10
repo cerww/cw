@@ -121,3 +121,8 @@ inline constexpr T clamp(T lb, T ub, T thing,comp c) {
 inline glm::vec2 unitVec(math::radians r) {
 	return { math::cos(r),math::sin(r) };
 }
+
+inline glm::vec2 rotate(glm::vec2 dir, math::radians angle) {
+	return glm::vec2(	dir.x*math::cos(angle) - dir.y*math::sin(angle),
+						dir.x*math::sin(angle) + dir.y*math::cos(angle));
+}

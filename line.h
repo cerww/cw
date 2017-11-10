@@ -21,4 +21,18 @@ enum class line_type {
 };
 
 template<line_type type>
-void drawLine(drawRenderer&, glm::vec2 p1, glm::vec2 p2, Color color, size_t width);
+inline void drawLine(drawRenderer & renderer, const glm::vec2 p1, const glm::vec2 p2, const Color color, const size_t width) {
+	const math::radians angle = math::atan2((p1 - p2).x, (p1 - p2).y);
+	const double length = glm::length(p1 - p2);
+	renderer.draw(glm::vec4{ p1.x,p1.y,width,length },
+		defaultUV,
+		Rectangle::getFlatColor().id,
+		color,
+		1.0f,
+		angle,
+		glm::vec2{p1.x + width/2,p1.y});
+	if constexpr(type == line_type::ROUND) {
+		circle::drawCircle(renderer, p1, width / 2, color);
+		circle::drawCircle(renderer, p2, width / 2, color);
+	}
+}

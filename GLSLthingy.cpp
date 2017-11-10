@@ -1,39 +1,26 @@
 #include "GLSLthingy.h"
+
 GLSLthingy::GLSLthingy() {}
 
-void GLSLthingy::compileshad(const std::string &vertfile, const std::string &fragfile) {
-	programID = glCreateProgram();
-	vertShadID = glCreateShader(GL_VERTEX_SHADER);
-	fragShadID = glCreateShader(GL_FRAGMENT_SHADER);
-	if (!vertShadID) {
-		printf("0a");
-		glfwTerminate();
-	}
-	if (!fragShadID) {
-		printf("0b");
-		glfwTerminate();
-	}
-	/*
-	std::ifstream vertFilePath(vertfile.c_str());
-	std::string vertFileConts="";
-	std::string line = "";
-	while(std::getline(vertFilePath,line))
-	vertFileConts+=line+"\n";
-	vertFilePath.close();
-	compleshady(vertFileConts,vertShadID);
-	//std::cout<<vertFileConts<<'\n';
+namespace D{
+inline std::string getFileContents(const std::string& filePath) {
+	std::string fileContents;
+	std::ifstream file(filePath, std::ios::in);
+	file.seekg(0, std::ios::end);
+	int filesize = (int)file.tellg();
+	file.seekg(0, std::ios::beg);
+	filesize -= (int)file.tellg();
+	fileContents.resize(filesize);
 
-	std::ifstream fragFilePath(fragfile.c_str());
-	std::string fragFileConts="";//use same var so i take up less memory. faster?
-	line = "";
-	while(std::getline(fragFilePath,line))
-	fragFileConts+=line+"\n";
-	fragFilePath.close();
-	//std::cout<<fragFileConts<<'\n';
-	compleshady(fragFileConts,fragShadID);*/
-	compleshady(vertfile, vertShadID);
-	compleshady(fragfile, fragShadID);
+	file.read(&fileContents[0], filesize);
+	file.close();
+	return fileContents;
 }
+}
+void GLSLthingy::compileshad(const std::string &vertfile, const std::string &fragfile) {
+	compileshadSource(D::getFileContents(vertfile),D::getFileContents(fragfile));
+}
+
 void GLSLthingy::compileshadSource(const std::string&vert, const std::string&frag) {
 	programID = glCreateProgram();
 	vertShadID = glCreateShader(GL_VERTEX_SHADER);

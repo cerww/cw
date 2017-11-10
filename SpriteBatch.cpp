@@ -1,5 +1,6 @@
 #include "SpriteBatch.h"
 #include <iostream>
+#include "things.h"
 
 SpriteBatch::SpriteBatch()
 {
@@ -13,12 +14,12 @@ SpriteBatch::~SpriteBatch(){
         glDeleteBuffers(1,&_vbo);
 }
 
-void SpriteBatch::begin(glyphSortType s/*TEXTURE default */){
+void SpriteBatch::start(glyphSortType s/*TEXTURE default */){
     _sortType=s;
     _renderBatchs.clear();
     _glyphs.clear();
 }
-void SpriteBatch::end(){
+void SpriteBatch::stop(){
 
     _glyphPtrs.resize(_glyphs.size());
     for(unsigned x = 0;x<_glyphPtrs.size();++x){
@@ -28,6 +29,7 @@ void SpriteBatch::end(){
 
     createRenderBatches();
 }
+
 Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color colour,float depthy):
     text(texty),
     depth(depthy){
@@ -51,6 +53,7 @@ Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color 
     botRight.pos.y = dimensions.y;
     botRight.setUV(uv.x+uv.z,uv.y);
 }
+
 Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color colour,float depthy,math::radians angle):
     text(texty),
     depth(depthy){
@@ -85,35 +88,61 @@ Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color 
     botRight.pos.y = dimensions.y+br.y;
     botRight.setUV(uv.x+uv.z,uv.y);
 }
-void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,float depth){
+
+Glyph::Glyph(const glm::vec4 & dimensions, const glm::vec4 & uv, GLuint text, Color colour, float depth, const math::radians angle, const glm::vec2 rotationPoint){
+	glm::vec2 tl = { dimensions.x ,dimensions.y + dimensions.w };
+	glm::vec2 tr = { dimensions.x + dimensions.z ,dimensions.y + dimensions.w };
+	glm::vec2 bl = { dimensions.x,dimensions.y  };
+	glm::vec2 br = { dimensions.x + dimensions.z, dimensions.y };
+
+	tl = rotate(tl - rotationPoint, angle) + rotationPoint;
+	tr = rotate(tr - rotationPoint, angle) + rotationPoint;
+	bl = rotate(bl - rotationPoint, angle) + rotationPoint;
+	br = rotate(br - rotationPoint, angle) + rotationPoint;
+	
+	topLeft.color = colour;
+	topLeft.pos.x = tl.x;
+	topLeft.pos.y = tl.y;
+	topLeft.setUV(uv.x, uv.y + uv.w);
+
+	topRight.color = colour;
+	topRight.pos.x = tr.x;
+	topRight.pos.y = tr.y;
+	topRight.setUV(uv.x + uv.z, uv.y + uv.w);
+
+	botLeft.color = colour;
+	botLeft.pos.x = bl.x;
+	botLeft.pos.y = bl.y;
+	botLeft.setUV(uv.x, uv.y);
+
+	botRight.color = colour;
+	botRight.pos.x = br.x;
+	botRight.pos.y = br.y;
+	botRight.setUV(uv.x + uv.z, uv.y);
+
+}
+void SpriteBatch::draw(const glm::vec4 dimensions, const glm::vec4 uv, const GLuint text, const Color colour, const float depth) {
+	std::unique_lock<std::mutex> awesomey(m_mutex);
     _glyphs.emplace_back(dimensions,uv,text,colour,depth);
 }
-void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,float depth,math::radians angle){
+
+void SpriteBatch::draw(const glm::vec4 dimensions, const glm::vec4 uv, const GLuint text, const Color colour, const float depth, const math::radians angle){
+	std::unique_lock<std::mutex> awesomey(m_mutex);
 	_glyphs.emplace_back(dimensions, uv, text, colour, depth, angle);
 }
-void SpriteBatch::draw(glm::vec4 dimensions,glm::vec4 uv,GLuint text,Color colour,float depth,glm::vec2 dir){
-    const glm::vec2 right(1.0,0.0);
 
+void SpriteBatch::draw(const glm::vec4 dimensions, const glm::vec4 uv, const GLuint text, const Color colour, const float depth, const glm::vec2 dir){
+	std::unique_lock<std::mutex> awesomey(m_mutex);
     _glyphs.emplace_back(dimensions,uv,text,colour,depth,((dir.y<0.0f)?-1.0f:1.0f)*acos(glm::dot(glm::vec2(1.0f,0.0f),dir)));
 }
 
-void SpriteBatch::draw(glm::vec4 dimensions, glm::vec4 uv, GLuint text, Color colour, float  depth, math::radians angle, glm::vec2 offSetAfterRotation){
-	Glyph& thing = _glyphs.emplace_back(dimensions, uv, text, colour, depth, angle);
-	thing.botLeft.pos.x -= offSetAfterRotation.x;
-	thing.botRight.pos.x -= offSetAfterRotation.x;
-	thing.topLeft.pos.x -= offSetAfterRotation.x;
-	thing.topRight.pos.x -= offSetAfterRotation.x;
-
-	thing.botLeft.pos.y -= offSetAfterRotation.y;
-	thing.botRight.pos.y -= offSetAfterRotation.y;
-	thing.topLeft.pos.y -= offSetAfterRotation.y;
-	thing.topRight.pos.y -= offSetAfterRotation.y;
+void SpriteBatch::draw(const glm::vec4 dimensions, const glm::vec4 uv, const  GLuint text, const Color colour, const  float depth, const  math::radians angle,const glm::vec2 rotationPoint){
+	std::unique_lock<std::mutex> awesomey(m_mutex);
+	_glyphs.emplace_back(dimensions, uv, text, colour, depth, angle,rotationPoint);
 }
 
-glm::vec2 Glyph::rotate(glm::vec2 dir,math::radians angle){
-	return glm::vec2(dir.x*math::cos(angle) - dir.y*math::sin(angle),
-			   		 dir.x*math::sin(angle) + dir.y*math::cos(angle));
-}
+
+
 void SpriteBatch::renderBatch(){
     glBindVertexArray(_vao);
     for(int i = 0;i<(int)_renderBatchs.size();++i){
@@ -174,15 +203,15 @@ void SpriteBatch::sortGlyph(){
     switch(_sortType){
         case glyphSortType::BACK_TO_FRONT:
             //std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),compareBackToFront);
-            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph* a,Glyph* b){return a->depth>b->depth;});
+            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a, Glyph const*const b){return a->depth>b->depth;});
             break;
         case glyphSortType::FRONT_TO_BACK:
             //std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),compareFrontToBack);
-            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph* a,Glyph* b){return a->depth<b->depth;});
+            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a, Glyph const*const b){return a->depth<b->depth;});
             break;
         case glyphSortType::TEXT:
             //std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),compareTexture);
-            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph* a,Glyph* b){return a->text<b->text;});
+            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a,Glyph const*const b){return a->text<b->text;});
             break;
         case glyphSortType::NONE:
             break;
