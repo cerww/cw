@@ -36,18 +36,12 @@ void GLSLthingy::compileshadSource(const std::string&vert, const std::string&fra
 	compleshady(vert, vertShadID);
 	compleshady(frag, fragShadID);
 }
-void GLSLthingy::compleshady(const std::string &path, GLuint &ID) {
-
-	std::ifstream vertFilePath(path.c_str());
-	std::string vertfil = "";
-	std::string line = "";
-	while (std::getline(vertFilePath, line))vertfil += line + "\n";
-	vertFilePath.close();
+void GLSLthingy::compleshady(const std::string &conts, GLuint &ID) {
 
 	//std::cout<<vertfil<<std::endl;//<<vertfil.c_str();
 	//std::cout<<path<<std::endl;
 	//const char* ContPtr = path.c_str();
-	const char* ContPtr = vertfil.c_str();
+	const char* ContPtr = conts.c_str();
 	glShaderSource(ID, 1, &ContPtr, nullptr);
 	glCompileShader(ID);
 	GLint success = 0;
