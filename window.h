@@ -38,8 +38,8 @@ class window{//just a window, and the keys/mouse
 		static void setScrolled(GLFWwindow* win,double x,double y){
 			m_refs[win]->m_scrolled = { x,y };
 		}
-		uint32_t getCodePoint(){
-			return std::exchange(m_codePoint,0);//i have to get rid of code point somewhere
+		uint32_t getCodePoint()const {
+			return m_codePoint;
 		};
 		std::pair<double,double> getScrolled()const {
 			return m_scrolled;
@@ -56,7 +56,7 @@ class window{//just a window, and the keys/mouse
         std::unordered_map<std::string,texture> _textures;
         fpslimiter _fpsLimiter;
 		uint32_t m_codePoint = 0;
-		static std::unordered_map<GLFWwindow*, window*> m_refs;//for code points
+		static std::unordered_map<GLFWwindow*, window*> m_refs;//for static functions
 		std::pair<double, double> m_scrolled;
 };
 

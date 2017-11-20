@@ -26,7 +26,7 @@ window::window(GLFWwindow* window):_window(window){
 		window::setCodePoint(win, t_codePoint);
 	});
 	glfwSetScrollCallback(_window, [](GLFWwindow* win, double x, double y) {
-		
+		window::setScrolled(win, x, y);
 	});
 	m_refs[window] = this;
 }
@@ -58,6 +58,7 @@ void window::update(){
     glfwSwapBuffers(_window);
     /* Poll for and process events */
 	m_scrolled = {};
+	m_codePoint = 0;
     glfwPollEvents();
     glfwGetCursorPos(_window,&m_mousePos.x,&m_mousePos.y);
 	//std::vector<event> events;

@@ -19,12 +19,12 @@ void SpriteBatch::start(glyphSortType s/*TEXTURE default */){
     _renderBatchs.clear();
     _glyphs.clear();
 }
-void SpriteBatch::stop(){
 
+void SpriteBatch::stop(){
     _glyphPtrs.resize(_glyphs.size());
-    for(unsigned x = 0;x<_glyphPtrs.size();++x){
-        _glyphPtrs[x]=&_glyphs[x];
-    }
+#pragma loop(hint_parallel(8))
+    for(int x = 0;x<_glyphPtrs.size();++x)
+        _glyphPtrs[x]=&_glyphs[x];    
     sortGlyph();
 
     createRenderBatches();
@@ -89,7 +89,9 @@ Glyph::Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint texty,Color 
     botRight.setUV(uv.x+uv.z,uv.y);
 }
 
-Glyph::Glyph(const glm::vec4 & dimensions, const glm::vec4 & uv, GLuint text, Color colour, float depth, const math::radians angle, const glm::vec2 rotationPoint){
+Glyph::Glyph(const glm::vec4 & dimensions, const glm::vec4 & uv, GLuint texty, Color colour, float depthy, const math::radians angle, const glm::vec2 rotationPoint):
+	text(texty),
+	depth(depthy){
 	glm::vec2 tl = { dimensions.x ,dimensions.y + dimensions.w };
 	glm::vec2 tr = { dimensions.x + dimensions.z ,dimensions.y + dimensions.w };
 	glm::vec2 bl = { dimensions.x,dimensions.y  };
@@ -121,6 +123,7 @@ Glyph::Glyph(const glm::vec4 & dimensions, const glm::vec4 & uv, GLuint text, Co
 	botRight.setUV(uv.x + uv.z, uv.y);
 
 }
+
 void SpriteBatch::draw(const glm::vec4 dimensions, const glm::vec4 uv, const GLuint text, const Color colour, const float depth) {
 	std::unique_lock<std::mutex> awesomey(m_mutex);
     _glyphs.emplace_back(dimensions,uv,text,colour,depth);
@@ -136,12 +139,10 @@ void SpriteBatch::draw(const glm::vec4 dimensions, const glm::vec4 uv, const GLu
     _glyphs.emplace_back(dimensions,uv,text,colour,depth,((dir.y<0.0f)?-1.0f:1.0f)*acos(glm::dot(glm::vec2(1.0f,0.0f),dir)));
 }
 
-void SpriteBatch::draw(const glm::vec4 dimensions, const glm::vec4 uv, const  GLuint text, const Color colour, const  float depth, const  math::radians angle,const glm::vec2 rotationPoint){
+void SpriteBatch::draw(const glm::vec4 dimensions, const glm::vec4 uv, const  GLuint text, const Color colour, const  float depth, const  math::radians angle, const glm::vec2 rotationPoint) {
 	std::unique_lock<std::mutex> awesomey(m_mutex);
 	_glyphs.emplace_back(dimensions, uv, text, colour, depth, angle,rotationPoint);
 }
-
-
 
 void SpriteBatch::renderBatch(){
     glBindVertexArray(_vao);
@@ -153,30 +154,30 @@ void SpriteBatch::renderBatch(){
 }
 
 void SpriteBatch::createRenderBatches(){
-    if(_glyphs.empty()) return;
-    std::vector<Vertex> vertices(_glyphs.size()*6);
+    if(_glyphPtrs.empty()) return;
+    std::vector<Vertex> vertices(_glyphPtrs.size()*6);
     //renderBatch newBatch(0,6,_glyphs[0]->text);
-    _renderBatchs.emplace_back(0,6,_glyphs[0].text);
-    int cv = 0;
-    vertices[cv++]=_glyphs[0].topLeft;
-    vertices[cv++]=_glyphs[0].botLeft;
-    vertices[cv++]=_glyphs[0].botRight;
-    vertices[cv++]=_glyphs[0].botRight;
-    vertices[cv++]=_glyphs[0].topRight;
-    vertices[cv++]=_glyphs[0].topLeft;
-
-    for(unsigned cg = 1;cg<_glyphs.size();++cg){
-        if(_glyphs[cg].text!=_glyphs[cg-1].text){
-            _renderBatchs.emplace_back(cg*6,6,_glyphs[cg].text);
+    _renderBatchs.emplace_back(0,6, _glyphPtrs[0]->text);
+    int64_t cv = 0;
+    vertices[cv++]= _glyphPtrs[0]->topLeft;
+    vertices[cv++]= _glyphPtrs[0]->botLeft;
+    vertices[cv++]= _glyphPtrs[0]->botRight;
+    vertices[cv++]= _glyphPtrs[0]->botRight;
+    vertices[cv++]= _glyphPtrs[0]->topRight;
+    vertices[cv++]= _glyphPtrs[0]->topLeft;
+#pragma loop(hint_parallel(8))
+    for(int cg = 1;cg<_glyphPtrs.size();++cg){
+        if(_glyphPtrs[cg]->text!= _glyphPtrs[cg-1]->text){
+            _renderBatchs.emplace_back(cg*6,6, _glyphPtrs[cg]->text);
         }else{
             _renderBatchs.back().numVerts+=6;
         }
-        vertices[cv++]=_glyphs[cg].topLeft;
-        vertices[cv++]=_glyphs[cg].botLeft;
-        vertices[cv++]=_glyphs[cg].botRight;
-        vertices[cv++]=_glyphs[cg].botRight;
-        vertices[cv++]=_glyphs[cg].topRight;
-        vertices[cv++]=_glyphs[cg].topLeft;
+        vertices[cv++]= _glyphPtrs[cg]->topLeft;
+        vertices[cv++]= _glyphPtrs[cg]->botLeft;
+        vertices[cv++]= _glyphPtrs[cg]->botRight;
+        vertices[cv++]= _glyphPtrs[cg]->botRight;
+        vertices[cv++]= _glyphPtrs[cg]->topRight;
+        vertices[cv++]= _glyphPtrs[cg]->topLeft;
     }
     glBindBuffer(GL_ARRAY_BUFFER,_vbo);
     glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(Vertex),nullptr,GL_DYNAMIC_DRAW);
@@ -203,28 +204,20 @@ void SpriteBatch::sortGlyph(){
     switch(_sortType){
         case glyphSortType::BACK_TO_FRONT:
             //std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),compareBackToFront);
-            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a, Glyph const*const b){return a->depth>b->depth;});
+            std::sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a, Glyph const*const b){return a->depth>b->depth;});
             break;
         case glyphSortType::FRONT_TO_BACK:
             //std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),compareFrontToBack);
-            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a, Glyph const*const b){return a->depth<b->depth;});
+            std::sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a, Glyph const*const b){return a->depth<b->depth;});
             break;
         case glyphSortType::TEXT:
             //std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),compareTexture);
-            std::stable_sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a,Glyph const*const b){return a->text<b->text;});
+            std::sort(_glyphPtrs.begin(),_glyphPtrs.end(),[](Glyph const* const a,Glyph const*const b){
+				return std::tie(a->text, a->depth) < std::tie(b->text, b->depth);
+			});
             break;
         case glyphSortType::NONE:
             break;
     }
 }
-/*
-bool SpriteBatch::compareFrontToBack(const Glyph* a,const Glyph*b){
-    return (a->depth>b->depth);
-}
-bool SpriteBatch::compareBackToFront(const Glyph*a,const Glyph*b){
-    return a->depth<b->depth;
-}
-bool SpriteBatch::compareTexture(const Glyph*a,const Glyph*b){
-    return a->text<b->text;
-}
-*/
+

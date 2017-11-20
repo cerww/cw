@@ -20,6 +20,7 @@ texture imgLoader::loadPNG(const std::string &path){
         glfwTerminate();
 		return {};
     }
+	
     glGenTextures(1,&(tex.id));
     glBindTexture(GL_TEXTURE_2D,tex.id);
 
@@ -30,6 +31,7 @@ texture imgLoader::loadPNG(const std::string &path){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
     glGenerateMipmap(GL_TEXTURE_2D);
+	
     glBindTexture(GL_TEXTURE_2D,0);
     return tex;
 }

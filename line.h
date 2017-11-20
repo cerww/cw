@@ -3,7 +3,7 @@
 #include "Rectangle.h"
 #include "Drawable.h"
 
-class line:public Drawable<line>{
+class line :public Drawable<line> {
 public:
 	line() = default;
 	line(glm::vec2 t_p1, glm::vec2 t_p2, Color t_color = colours::WHITE, size_t t_width = 2) :m_p1(t_p1), m_p2(t_p2), m_color(t_color), m_width(t_width) {};
@@ -22,7 +22,7 @@ enum class line_type {
 
 template<line_type type>
 inline void drawLine(drawRenderer & renderer, const glm::vec2 p1, const glm::vec2 p2, const Color color, const size_t width) {
-	const math::radians angle = math::atan2((p1 - p2).x, (p1 - p2).y);
+	const math::radians angle = math::atan2((p2 - p1).x, (p2 - p1).y).reverse();//rotate get rotates counter clockwise, needs to be other way
 	const double length = glm::length(p1 - p2);
 	renderer.draw(glm::vec4{ p1.x,p1.y,width,length },
 		defaultUV,
@@ -30,9 +30,9 @@ inline void drawLine(drawRenderer & renderer, const glm::vec2 p1, const glm::vec
 		color,
 		1.0f,
 		angle,
-		glm::vec2{p1.x + width/2,p1.y});
+		glm::vec2{ p1.x + width / 2,p1.y });
 	if constexpr(type == line_type::ROUND) {
-		circle::drawCircle(renderer, p1, width / 2, color);
-		circle::drawCircle(renderer, p2, width / 2, color);
+		circle::drawCircle(renderer, p1 + glm::vec2{ width / 2,0 }, width / 2, color);
+		circle::drawCircle(renderer, p2 + glm::vec2{ width / 2,0 }, width / 2, color);
 	}
 }

@@ -1,6 +1,6 @@
 #include "Rectangle.h"
 
-texture Rectangle::flatColor;// = imgLoader::loadPNG("blank.png");
+texture Rectangle::flatColor;
 bool Rectangle::Loaded = 0;
 
 Rectangle::Rectangle(glm::vec4 d,Color c):drawableObj(d,flatColor,c){

@@ -38,7 +38,7 @@ class SpriteBatch
 {
     public:
         SpriteBatch();
-        virtual ~SpriteBatch();
+        ~SpriteBatch();
         //void init();
         void start(glyphSortType s=glyphSortType::TEXT);
         void stop();
@@ -47,9 +47,6 @@ class SpriteBatch
 		void draw(const glm::vec4 dimensions, const glm::vec4 uv, const GLuint text, const Color colour, const float depth, const glm::vec2 dir);
 		void draw(const glm::vec4 dimensions, const glm::vec4 uv, const GLuint text, const Color colour, const float depth);
         void renderBatch();
-
-    protected:
-
     private:
         void createRenderBatches();
         void createVertArray();

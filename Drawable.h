@@ -18,3 +18,5 @@ public:
 		this->self().Draw(renderer);
 	}
 };
+
+

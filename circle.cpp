@@ -6,7 +6,7 @@ circle::circle(){
 		loadCircle();	
 }
 
-void circle::drawCircle(drawRenderer & renderer,glm::vec2 spot, double r , Color C){
+void circle::drawCircle(drawRenderer & renderer,glm::vec2 spot, double r, Color C){
 	if(!s_circle.id)
 		loadCircle();	
 	renderer.draw(glm::vec4{ spot.x - r,spot.y - r,r * 2,r * 2 }, defaultUV, s_circle.id, C, 1.0f);

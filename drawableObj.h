@@ -10,7 +10,7 @@ const glm::vec4 defaultUV = { 0.0f,0.0f,1.0f,1.0f };
 class drawableObj;
 
 
-class drawRenderer :public renderer<drawRenderer>,private SpriteBatch {
+class drawRenderer :public renderer<drawRenderer>,private SpriteBatch {//msvs doesnt like me ;-;, hacky way around this
 public:
 	drawRenderer();
 	/*

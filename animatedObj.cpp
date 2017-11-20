@@ -22,23 +22,14 @@ void renderAnimatedObjects::Render(const camera2D& cam){
     spriteB.start();
 }
 
-void renderAnimatedObjects::drawObj(animatedObj* obj){
-    //m_objs.push_back(obj);
-    if(obj->currentAni==nullptr){
-        return;
-    }
-	obj->update();
-    spriteB.draw(obj->m_dims,obj->uv,obj->m_texture.id,Color(255,255,255,255),1.0f);
+void renderAnimatedObjects::drawObj(animatedObj& obj){
+	obj.updateFrame();
+    spriteB.draw(obj.m_dims,obj.m_uv,obj.m_texture.id,Color(255,255,255,255),1.0f);
 }
 
-animatedObj::animatedObj(glm::vec4&& dims,const std::string& animationInfo):m_dims(dims){
-    getAniInfo(animationInfo);
+animatedObj::animatedObj(glm::vec4 dims,std::string animationInfo):m_dims(dims){
+    getAniInfo(std::move(animationInfo));
      //std::cout<<dims.x<<' '<<dims.y<<' '<<dims.z<<' '<<dims.w<<'\n';
-}
-
-animatedObj::animatedObj(glm::vec4& dims,const std::string& animationInfo):m_dims(dims){
-    getAniInfo(animationInfo);
-    //std::cout<<dims.x<<' '<<dims.y<<' '<<dims.z<<' '<<dims.w<<'\n';
 }
 
 renderAnimatedObjects::renderAnimatedObjects(){
@@ -53,25 +44,22 @@ renderAnimatedObjects::renderAnimatedObjects(){
     spriteB.start();
 }
 
-void animatedObj::setPart(const std::string& partName){
+void animatedObj::setAnimation(const std::string& partName){
     auto it = m_animations.find(partName);
     if(it==m_animations.end()){
-        std::cout<<partName<<std::endl;
         return;
     }
     currentAni = &m_animations[partName];
     m_currentFrame = 0;
     m_endingFrame = currentAni->num*currentAni->speed;
 
-    uv.x = (currentAni->start%m_frameW)*1.0f/(float)(m_frameW);
-    uv.y = (currentAni->start/m_frameW)*1.0f/(float)m_frameW;//uv.x+1.0f/(float)m_frameW;
-    uv.z = 0+1.0f/(float)m_frameW;
-    uv.w = 0+1.0f/(float)m_frameH;
-
+	m_uv.x = (currentAni->start%m_frameW)*1.0f / (float)(m_frameW);
+	m_uv.y = (currentAni->start / m_frameW)*1.0f / (float)m_frameW;
+	
     //std::cout<<uv.x<<" "<<uv.y<<" "<<uv.z<<" "<<uv.w<<'\n';
 }
 
-void animatedObj::update() {
+void animatedObj::updateFrame() {
 	if (!currentAni) {
 		return;
 	}
@@ -92,8 +80,8 @@ void animatedObj::update() {
 		}//if(curr){}
 	}
 
-	uv.x = ((currentAni->start + (m_currentFrame / currentAni->speed)) % m_frameW)*1.0f / (float)(m_frameW);
-	uv.y = ((currentAni->start + (m_currentFrame / currentAni->speed)) / m_frameW)*1.0f / (float)m_frameW;
+	m_uv.x = ((currentAni->start + (m_currentFrame / currentAni->speed)) % m_frameW)*1.0f / (float)(m_frameW);
+	m_uv.y = ((currentAni->start + (m_currentFrame / currentAni->speed)) / m_frameW)*1.0f / (float)m_frameW;
 }
 
 void animatedObj::getAniInfo(const std::string& animationInfo) {
@@ -144,14 +132,17 @@ void animatedObj::getAniInfo(const std::string& animationInfo) {
 		currentAni = nullptr;
 		return;
 	}
+	m_uv.z = 1.0f / (float)m_frameW;
+	m_uv.w = 1.0f / (float)m_frameH;
 }
 
-void animatedObj::init(glm::vec4&& dims,const std::string& aniInfo){
+void animatedObj::init(glm::vec4 dims,const std::string& aniInfo){
     m_dims = dims;
     getAniInfo(aniInfo);
 }
 
-void animatedObj::init(glm::vec4& dims,const std::string& aniInfo){
-    m_dims = dims;
-    getAniInfo(aniInfo);
+void animatedObj::Draw(drawRenderer& renderer){
+	updateFrame();
+	renderer.draw(m_dims, m_uv, m_texture.id, colours::BLACK, 1.0f);
 }
+

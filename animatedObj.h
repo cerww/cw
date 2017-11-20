@@ -27,17 +27,17 @@ texture will be mapped like this
 0 1 2  3  4  5  6
 */
 
-class animatedObj{
+class animatedObj:Drawable<animatedObj>{
     public:
-        animatedObj(glm::vec4&&,const std::string&);
-        animatedObj(glm::vec4&,const std::string&);
+        animatedObj(glm::vec4,std::string);
         animatedObj() = default;
         //void draw(app&);
-		void setPart(const std::string&);
-		void update();
-        void init(glm::vec4&&,const std::string&);//use this if you called the ctor with no agrs
-        void init(glm::vec4&,const std::string&);//use this if you called the ctor with no agrs
-    protected:
+		void setAnimation(const std::string&);
+        void init(glm::vec4,const std::string&);//use this if you called the ctor with no agrs
+		void setDims(glm::vec4 t_dims) { m_dims = std::move(t_dims); }
+		void Draw(drawRenderer&);
+	private:
+		void updateFrame();
         enum class animationMode{REPEAT,STAY,END};
         struct framey{
             framey() = default;
@@ -47,8 +47,8 @@ class animatedObj{
             animationMode mode;
             int speed;
         };
-        uint64_t m_currentFrame;
-        uint64_t m_endingFrame;
+        int m_currentFrame;
+        int m_endingFrame;
         std::string m_currentPart;
         framey* currentAni=nullptr;
         std::unordered_map<std::string,framey> m_animations;
@@ -59,9 +59,8 @@ class animatedObj{
         void getAniInfo(const std::string&);
         int m_frameW;
         int m_frameH;
-        GLuint m_textureid;
         texture m_texture;
-        glm::vec4 uv = glm::vec4(0.0f,0.0f,1.0f,1.0f);
+        glm::vec4 m_uv = glm::vec4(0.0f,0.0f,1.0f,1.0f);
 };
 class renderAnimatedObjects:public renderer<renderAnimatedObjects>{
     public:
@@ -69,10 +68,10 @@ class renderAnimatedObjects:public renderer<renderAnimatedObjects>{
         //renderAnimatedObjects();
         //renderAnimatedObjects();
         void Render(const camera2D& cam);
-        virtual void drawObj(animatedObj *);
+        void drawObj(animatedObj&);
         //void start(){spriteB.begin();};
     private:
-        std::vector<animatedObj*> m_objs;
+        //std::vector<animatedObj*> m_objs;
 		GLSLthingy glslProg;
 		SpriteBatch spriteB;
 };
