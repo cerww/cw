@@ -20,7 +20,7 @@ slider::slider(glm::vec4 dims, int min, int max, int start) :
 	}
 }
 
-void slider::Draw(drawRenderer & renderer) const{
+void slider::draw_impl(drawRenderer & renderer) const{
 	//const glm::vec4 barDims = { m_dims.x,m_dims.y + m_dims.w*(m_current - m_min) / (m_max - m_min) - 5,m_dims.z, 10 };
 	//barDims.w = m_dims.w *(float)(m_current-m_min)/(float)(m_max/m_min);
 	renderer.draw(glm::vec4(m_dims.x, m_dims.y + 2, m_dims.z - 2, m_dims.w), defaultUV, bar.id, colours::WHITE, 1.0f);

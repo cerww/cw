@@ -8,7 +8,7 @@ public:
 	slider(glm::vec4,int = 0,int = 100,int = 50);
 	int getVal()const { return m_current; };
 	glm::vec4 getDims()const { return m_dims; };
-	void Draw(drawRenderer&)const;
+	void draw_impl(drawRenderer&)const;
 	bool update(glm::vec2,int);
 private:
 	static texture bar;// = imgLoader::loadPNG("sliderBar.png");

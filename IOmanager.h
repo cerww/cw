@@ -4,15 +4,9 @@
 #include <vector>
 #include <string>
 #include <fstream>
-class IOmanager
+struct IOmanager
 {
-    public:
-        static bool readFileToBuffer(const std::string& filePath,std::vector<unsigned char>& buffer);
-        IOmanager() = default;
-
-    protected:
-
-    private:
+	static bool readFileToBuffer(const std::string& filePath,std::vector<unsigned char>& buffer);
 };
 
 #endif // IOMANAGER_H

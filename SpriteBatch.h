@@ -16,7 +16,7 @@ NONE,FRONT_TO_BACK,BACK_TO_FRONT,TEXT
 class Glyph{
 public:
     Glyph(){};
-    Glyph(const glm::vec4& dimensions,const glm::vec4& uv,GLuint text,Color colour,float depth);
+	Glyph(const glm::vec4& dimensions, const glm::vec4& uv, GLuint text, Color colour, float depth);
 	Glyph(const glm::vec4& dimensions, const glm::vec4& uv, GLuint text, Color colour, float depth, math::radians angle);
 	Glyph(const glm::vec4& dimensions, const glm::vec4& uv, GLuint text, Color colour, float depth, math::radians angle,const glm::vec2 rotationPoint);
     GLuint text;

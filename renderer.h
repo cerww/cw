@@ -9,11 +9,11 @@
 template<typename Renderer>
 class renderer//interface class 
 {
-    public:
-        renderer() = default;
-		void render(const camera2D& cam){
-			static_cast<Renderer*>(this)->Render(cam);
-		};
+public:
+	renderer() = default;
+	void render(const camera2D& cam){
+		static_cast<Renderer*>(this)->render_impl(cam);
+	};
 };
 
 #endif // RENDERER_H

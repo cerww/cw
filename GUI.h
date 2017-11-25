@@ -4,8 +4,14 @@
 #include <glm\glm.hpp>
 #include <memory>
 #include <algorithm>
+#include <unordered_map>
+#include "guiDrawable.h"
 
-class guiObject {
+
+
+class guiRenderer;
+
+class guiObject:public guiDrawable<guiObject> {
 public:
 	guiObject() = default;
 
@@ -19,55 +25,69 @@ public:
 	}
 	//guiObject& operator=(guiObject&& other) = default;
 	//guiObject& operator=(const guiObject&) = delete;
-	void update(glm::vec2 a,int b){
-		m_self->update(a,b);
+	void update_impl(glm::vec2 a,int b){
+		m_self->update(a, b);
 	};
-	void Draw(drawRenderer& renderer){
-		m_self->Draw(renderer);
+	void draw_impl(guiRenderer& renderer, glm::vec2 a)const;
+
+	void* get() {
+		return m_self.get();
 	};
 private:
 	struct concept{
-		virtual void Draw(drawRenderer&) = 0;
+		virtual void draw(guiRenderer&,glm::vec2) = 0;
 		virtual void update(glm::vec2, int) = 0;//mouse pos, mouse click
 	};
 	template<typename T>
 	struct obj:concept{
 		obj(T s) :stuffs(s) {};
 
-		void Draw(drawRenderer& renderer) override final{
-			stuffs.draw(renderer);
+		void draw(guiRenderer& renderer, glm::vec2 a) const override final {	
+			stuffs.draw(renderer, a);
 		};
+
 		void update(glm::vec2 mousePos, int clickTime) override final{
 			stuffs.update(mousePos, clickTime);
-		};//mouse pos, mouse click
+		};
 		T stuffs;
 	};
 	std::unique_ptr<concept> m_self = nullptr;
 };
 
-
-class GUI:public Drawable<GUI>{
+class GUI:public guiDrawable<GUI>{
 public:
 	GUI(glm::vec4);
-	void Draw(drawRenderer&);
-	void update(glm::vec2,int);//mouse pos, mouse click
+	void draw_impl(guiRenderer&, glm::vec2 a = {})const;
+	void update_impl(glm::vec2,int);//mouse pos, mouse click
 	template<typename T>
-	void addObject(T other){
-		m_objs.push_back(std::move(other));
+	decltype(auto) addObject(T other){
+		m_objs.push_back(std::move(other));		
+		return (T*)(m_objs.back().get());
 	};
-	void removeItem(int i){
-		std::swap(m_objs[i], m_objs.back());
-		m_objs.pop_back();
-	}
 	template<typename T,typename ... args>
 	decltype(auto) emplaceObj(args... Args){
-		return m_objs.emplace_back(T(std::forward<args>(Args)...));
+		return (T*)m_objs.emplace_back(T(std::forward<args>(Args)...)).get();
 	}
 	glm::vec2 getPos()const{
 		return { m_dims.x,m_dims.y };
 	}
+	template<typename T>
+	void removeItem(T* item){
+		for(int i = 0;i<m_objs.size();++i){
+			if(m_objs[i].get() == item){
+				std::swap(m_objs.back(), m_objs[i]);
+				m_objs.pop_back();
+				return;
+			}
+		}
+	}
 private:
 	std::vector<guiObject> m_objs;//order doesn't matter
 	glm::vec4 m_dims = {};
+};
+
+
+inline void guiObject::draw_impl(guiRenderer& renderer,glm::vec2 a)const{
+	m_self->draw(renderer, a);
 };
 

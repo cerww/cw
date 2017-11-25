@@ -62,8 +62,15 @@ public:
 		//m_totalWidthCache = std::accumulate(m_buttons.begin(), m_buttons.end(), 0, [](const auto& b) {return b.width; });
 		const auto mouseCoords = cam.scrnToWorld(win.getMousePos());
 		if (pointInBox(	glm::vec4{ m_pos.x,m_pos.y,m_totalWidth,m_height }, 
-						mouseCoords)) {
+						mouseCoords)&&
+			win.getMouseButton(mouseB::LEFT)) {
 			//std::lower_bound(m_buttons.begin(),m_buttons.end(),mouseCoords.x,[](){})
+			int i = 0;
+			int totalWidth = m_buttons[0].width;
+			for(i = 1;i<m_buttons.size() && mouseCoords.x - m_pos.x<totalWidth;++i){
+				totalWidth += m_buttons[i].width;
+			}
+			m_buttons[i].fn();
 		}
 	};
 private:	 

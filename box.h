@@ -21,5 +21,5 @@ struct points2{
 	operator glm::vec4(){
 		return glm::vec4{ p1.x,p1.y,p1.x - p2.x,p1.y - p2.y };
 	}
-}
+};
 

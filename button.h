@@ -5,13 +5,13 @@
 #include "things.h"
 #include <functional>
 #include <array>
+#include "guiDrawable.h"
 
 //template<typename fn>
 class button:private drawableObj {
 public:
 	button() = default;
 	button(glm::vec4, std::array<texture, 3> t, std::array<Color, 3> C, std::function<void()> f);
-
 	button(glm::vec4, texture t, Color C, std::function<void()> f);
 	//template<typename ... Args>
 	void doClick();
@@ -57,7 +57,4 @@ private:
 	//bool m_clicked = 0;
 	state m_currentState = state::NORMAL;
 };
-/*
-inline auto makeButton(glm::vec4 d, texture t, Color C, fn f,const std::string& s) {
-	return button(d, t, C, f,s);
-}*/
+

@@ -18,6 +18,5 @@ private:
 	static void loadCircle(){
 		s_circle = imgLoader::loadPNG("circle.png");
 	};
-
 };
 

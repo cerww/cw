@@ -3,13 +3,9 @@
 drawableObj::drawableObj(glm::vec4 dims,std::string file, Color color):
 	m_dims(dims), 
 	m_color(color),
-	m_texture(resourceManager::getTexture(std::move(file))){
-    
-}
+	m_texture(resourceManager::getTexture(std::move(file))){}
 
-drawableObj::drawableObj(glm::vec4 dims, texture t, Color color) : m_dims(std::move(dims)),m_texture(t), m_color(color) {
-	//m_texture = resourceManager::getTexture(file);
-}
+drawableObj::drawableObj(glm::vec4 dims, texture t, Color color) : m_dims(std::move(dims)),m_texture(t), m_color(color) {}
 
 void drawableObj::init(glm::vec4 dims,const std::string& file){
     m_dims = dims;
@@ -21,11 +17,11 @@ void drawableObj::move(glm::vec2 movea){
     m_dims.y += movea.y;
 }
 
-void drawableObj::Draw(drawRenderer & renderer)const{
-	renderer.draw(m_dims,m_uv,m_texture.id,m_color,1.0f);
+void drawableObj::draw_impl(drawRenderer & renderer)const{
+	renderer.draw(m_dims, uv,m_texture.id,m_color,1.0f);
 }
 
-void drawRenderer::Render(const camera2D& cam){
+void drawRenderer::render_impl(const camera2D& cam){
     glslProg.use();
 
     stop();
@@ -44,6 +40,7 @@ void drawRenderer::Render(const camera2D& cam){
 
     start();
 }
+
 drawRenderer::drawRenderer(){
     glslProg.compileshad("texture.vert","texture.frag");
     glslProg.addAttribute("vertPosition");

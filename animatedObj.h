@@ -28,51 +28,36 @@ texture will be mapped like this
 */
 
 class animatedObj:Drawable<animatedObj>{
-    public:
-        animatedObj(glm::vec4,std::string);
-        animatedObj() = default;
+public:
+	animatedObj(glm::vec4,std::string);
+	animatedObj() = default;
         //void draw(app&);
-		void setAnimation(const std::string&);
-        void init(glm::vec4,const std::string&);//use this if you called the ctor with no agrs
-		void setDims(glm::vec4 t_dims) { m_dims = std::move(t_dims); }
-		void Draw(drawRenderer&);
-	private:
-		void updateFrame();
-        enum class animationMode{REPEAT,STAY,END};
-        struct framey{
-            framey() = default;
-			framey(int a, int y, animationMode m, int sp) :start(a), num(y), mode(m), speed(sp) {};
-            int start;
-            int num;
-            animationMode mode;
-            int speed;
-        };
-        int m_currentFrame;
-        int m_endingFrame;
-        std::string m_currentPart;
-        framey* currentAni=nullptr;
-        std::unordered_map<std::string,framey> m_animations;
+	void setAnimation(const std::string&)noexcept;
+	void init(glm::vec4,const std::string&);//use this if you called the ctor with no agrs
+	void setDims(glm::vec4 t_dims) { m_dims = std::move(t_dims); }
+	void draw_impl(drawRenderer&);
+private:
+	void updateFrame()noexcept;
+	enum class animationMode{REPEAT,STAY,END};
+	struct framey{
+		framey() = default;
+		framey(int a, int y, animationMode m, int sp) :start(a), num(y), mode(m), speed(sp) {};
+	    int start;
+	    int num;
+	    animationMode mode;
+	    int speed;
+    };
+	int m_currentFrame;
+    int m_endingFrame;
+    std::string m_currentPart;
+    framey* currentAni=nullptr;
+    std::unordered_map<std::string,framey> m_animations;
 
-        glm::vec4 m_dims;
-        friend class renderAnimatedObjects;
-    private:
-        void getAniInfo(const std::string&);
-        int m_frameW;
-        int m_frameH;
-        texture m_texture;
-        glm::vec4 m_uv = glm::vec4(0.0f,0.0f,1.0f,1.0f);
-};
-class renderAnimatedObjects:public renderer<renderAnimatedObjects>{
-    public:
-        renderAnimatedObjects();
-        //renderAnimatedObjects();
-        //renderAnimatedObjects();
-        void Render(const camera2D& cam);
-        void drawObj(animatedObj&);
-        //void start(){spriteB.begin();};
-    private:
-        //std::vector<animatedObj*> m_objs;
-		GLSLthingy glslProg;
-		SpriteBatch spriteB;
+    glm::vec4 m_dims;    
+    void getAniInfo(const std::string&);
+    int m_frameW;
+    int m_frameH;
+    texture m_texture;
+	glm::vec4 m_uv = glm::vec4(0.0f,0.0f,1.0f,1.0f);
 };
 #endif // ANIMATEDOBJ_H

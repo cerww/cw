@@ -11,11 +11,9 @@ struct crtpb
 class drawRenderer;
 
 template<typename thing>
-class Drawable:crtpb<thing> {//requires a Draw function!
-public:
-	//template<typename...args>
+struct Drawable:crtpb<thing> {
 	void draw(drawRenderer& renderer)const {
-		this->self().Draw(renderer);
+		this->self().draw_impl(renderer);
 	}
 };
 

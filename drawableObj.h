@@ -7,8 +7,6 @@
 #include "mathStuff.h"
 #include "Drawable.h"
 const glm::vec4 defaultUV = { 0.0f,0.0f,1.0f,1.0f };
-class drawableObj;
-
 
 class drawRenderer :public renderer<drawRenderer>,private SpriteBatch {//msvs doesnt like me ;-;, hacky way around this
 public:
@@ -20,17 +18,13 @@ public:
 	void draw(glm::vec4 dimensions, glm::vec4 uv, GLuint text, Color colour, float depth);
 	*/
 	using SpriteBatch::draw;
-	/*
-	void draw(const drawableObj*);
-	void draw(const drawableObj&);
-	*/
+
 	template<typename type>
-	void drawObj(const Drawable<type>& item) {
+	void drawObj(const type& item) {
 		item.draw(*this);
 	};
 	
-	void Render(const camera2D& cam);
-	friend class drawableObj;
+	void render_impl(const camera2D& cam);
 private:
 	GLSLthingy glslProg;
 	//SpriteBatch spriteB;
@@ -39,23 +33,23 @@ private:
 
 class drawableObj:public Drawable<drawableObj>
 {
-    public:
-		drawableObj() = default;
-        drawableObj(glm::vec4,std::string file,Color = { 255,255,255,255 });
-		drawableObj(glm::vec4, texture file, Color = { 255,255,255,255 });
+public:
+	drawableObj() = default;
+	drawableObj(glm::vec4, std::string file, Color = { 255,255,255,255 });
+	drawableObj(glm::vec4, texture file, Color = { 255,255,255,255 });
+	void draw_impl(drawRenderer&)const;
 
-        void init(glm::vec4,const std::string& file);
-        void move(glm::vec2);
-        glm::vec2 getSpot()const{return glm::vec2(m_dims.x,m_dims.y);};
-		void Draw(drawRenderer&)const;
-    protected:
-		Color m_color;
-        texture m_texture;
-        //void setUVs(glm::vec4);
-        glm::vec4 m_dims;
-		glm::vec4 m_uv = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-    private:
-        friend class drawRenderer;//so i can do drawRenderer.draw(obj);
+    void init(glm::vec4,const std::string& file);
+    void move(glm::vec2);
+    glm::vec2 getSpot()const{return glm::vec2(m_dims.x,m_dims.y);};
+	void setSpot(glm::vec4 t)noexcept { m_dims = t; }
+	void setColor(Color c)noexcept { m_color = c; }
+	Color getColor()noexcept { return m_color; }
+	glm::vec4 uv = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+protected:
+	Color m_color;
+    texture m_texture;
+    glm::vec4 m_dims;		
 };
 
 #endif // DRAWABLEOBJ_H

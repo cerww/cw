@@ -4,21 +4,18 @@
 #include "drawableObj.h"
 
 
-void input::update(glm::vec2 pos, int click){
-	if(click){
-		m_selected = pointInBox(m_dims, pos);
-	}
+void input::update_impl(glm::vec2 pos, int click){
+	m_selected = click && pointInBox(m_dims, pos);	
 }
 
-void input::Draw(drawRenderer & renderer){	
+void input::draw_impl(drawRenderer & renderer){
 	renderer.draw(m_dims, defaultUV, 0, colours::WHITE, 1.0f);
 }
 
-void input::update(window& win,camera2D Cam){
-	update(Cam.scrnToWorld(win.getMousePos()), win.getMouseButton(mouseB::LEFT));
+void input::update_impl2(window& win,camera2D Cam){
 	if(win.getCodePoint()){
-		if (win.getCodePoint() != 127)
-			m_text += std::string(1, win.getCodePoint());
+		if (win.getCodePoint() != 127)//127 is backspace
+			m_text.push_back(win.getCodePoint());
 		else
 			m_text.pop_back();
 	}
